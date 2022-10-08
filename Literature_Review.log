@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  7 OCT 2022 12:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  8 OCT 2022 01:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -134,12 +134,6 @@ Underfull \hbox (badness 10000) in paragraph at lines 86--87
  []
 
 
-LaTeX Warning: Citation `Matching' on page 1 undefined on input line 89.
-
-
-LaTeX Warning: Citation `Matching' on page 1 undefined on input line 89.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 89--90
 
  []
@@ -152,30 +146,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 92--93
  []
 
 
-LaTeX Warning: Citation `MISD' on page 2 undefined on input line 95.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 94--96
 
  []
 
 
-LaTeX Warning: Citation `Butterfly' on page 2 undefined on input line 98.
-
-
-LaTeX Warning: Citation `Matching' on page 2 undefined on input line 98.
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 97--99
 
  []
-
-
-LaTeX Warning: Citation `Bit-Parallel' on page 2 undefined on input line 101.
-
-
-LaTeX Warning: Citation `pattern-matching' on page 2 undefined on input line 10
-1.
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 100--102
@@ -188,14 +166,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 103--105
  []
 
 
-LaTeX Warning: Citation `Distributed-Memory' on page 2 undefined on input line 
-107.
-
-
-LaTeX Warning: Citation `MPI' on page 2 undefined on input line 107.
-
-
-Overfull \hbox (18.93495pt too wide) in paragraph at lines 106--110
+Overfull \hbox (23.93855pt too wide) in paragraph at lines 106--110
 \OT1/cmr/m/n/10.95 com-pared and an-a-lyzed the dis-tributed mem-ory ar-chi-tec
 -ture and shared mem-ory architecture[[]].
  []
@@ -217,32 +188,24 @@ Underfull \hbox (badness 1102) in paragraph at lines 121--122
 219-1222, doi:
  []
 
-[3] [4] (./Literature_Review.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
+[3] [4] (./Literature_Review.aux) ) 
 Here is how much of TeX's memory you used:
- 1395 strings out of 478268
- 22412 string characters out of 5850339
- 318769 words of memory out of 5000000
- 19631 multiletter control sequences out of 15000+600000
- 474479 words of font info for 47 fonts, out of 8000000 for 9000
+ 1393 strings out of 478268
+ 22388 string characters out of 5850339
+ 318827 words of memory out of 5000000
+ 19630 multiletter control sequences out of 15000+600000
+ 474171 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,62p,913b,238s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><p:/tex
-live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><p:/texlive/2022
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><p:/texlive/2022/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr12.pfb><p:/texlive/2022/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmr17.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmti12.pfb>
-Output written on Literature_Review.pdf (4 pages, 93592 bytes).
+ 55i,6n,62p,908b,238s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<p:/texlive/2022/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmbx12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr10.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+2.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><p:/
+texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on Literature_Review.pdf (4 pages, 83867 bytes).
 PDF statistics:
- 47 PDF objects out of 1000 (max. 8388607)
- 28 compressed objects within 1 object stream
+ 42 PDF objects out of 1000 (max. 8388607)
+ 25 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 
