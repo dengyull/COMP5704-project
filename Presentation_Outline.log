@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  7 OCT 2022 01:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  19 NOV 2022 21:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -34,7 +34,7 @@ File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count193
 \l__pdf_internal_box=\box50
 )
-No file Presentation_Outline.aux.
+(./Presentation_Outline.aux)
 \openout1 = `Presentation_Outline.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 21.
@@ -59,33 +59,33 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 44.
 LaTeX Font Info:    Trying to load font information for U+lasy on input line 44
 .
+
 (p:/texlive/2022/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-)
-No file Presentation_Outline.bbl.
-[1
+) [1
 
 {p:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-(./Presentation_Outline.aux) ) 
+No file Presentation_Outline.bbl.
+[2] (./Presentation_Outline.aux) ) 
 Here is how much of TeX's memory you used:
- 485 strings out of 478268
- 8974 string characters out of 5850339
- 300797 words of memory out of 5000000
+ 487 strings out of 478268
+ 9024 string characters out of 5850339
+ 302797 words of memory out of 5000000
  18755 multiletter control sequences out of 15000+600000
  474205 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 32i,6n,38p,191b,236s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{p:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-su
-per/cm-super-ts1.enc}<p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmbx12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
-b><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><p:/texl
-ive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><p:/texlive/2022/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><p:/texlive/2022/texmf-dist
-/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on Presentation_Outline.pdf (1 page, 71079 bytes).
+ 32i,6n,38p,197b,236s stack positions out of 10000i,1000n,20000p,200000b,200000s
+{p:/texlive/2022/texmf-dist/fonts/enc/dvips/c
+m-super/cm-super-ts1.enc}<p:/texlive/2022/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmbx12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><p:/
+texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><p:/texlive/20
+22/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><p:/texlive/2022/texmf-
+dist/fonts/type1/public/cm-super/sfrm1095.pfb>
+Output written on Presentation_Outline.pdf (2 pages, 83356 bytes).
 PDF statistics:
- 39 PDF objects out of 1000 (max. 8388607)
- 23 compressed objects within 1 object stream
+ 42 PDF objects out of 1000 (max. 8388607)
+ 25 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

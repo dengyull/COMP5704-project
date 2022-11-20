@@ -95,7 +95,7 @@ Parallel String Matching base on MISD\\
 Although there exist MISD architectures dedicated to pattern matching that can be used to solve string match \cite{MISD}, there is not much research in this area and it has not shown better performance. MISD processors also lack practical applications, and research in this area has been shelved. \\
 
 Parallel String Matching base on SIMD\\
-SIMD uses one instruction stream to process multiple data streams. A typical example is the units on the GPU. Most Parallel String Matching benefits from SIMD architecture. Such as Chinta Someswararao's Butterfly Model \cite{Butterfly}, and many algorithms are developed based on the SSE instruction set \cite{Matching}. \\
+SIMD uses one instruction stream to process multiple data streams. A typical example is the units on the GPU. Most Parallel String Matching benefits from SIMD architecture. Such as Chinta Someswararao's Butterfly Model \cite{Butterfly}, and many algorithms are developed based on the SSE instruction set \cite{Matching}, which is an SIMD instruction set developed by intel. \\
 
 Parallel String Matching base on GPU(CUDA)\\
 Compared with the CPU, modern GPU has huge advantages in parallel computing. A single GPU integrates thousands of computing units, so thousands of parallel computing can be realized on a single GPU. There are also some ways to use CUDA programming provided by Nvidia GPU for String Matching. Giorgos Vasiliadis implements string search and regular expression matching operations for real-time inspection of network packets through the pattern matching library \cite{Bit-Parallel}, And in 2011 it reached a data volume close to 30 Gbit/s. Efficient GPU algorithms can be 30 times faster than a single CPU core, and Approximate String Matching with k Mismatches reports an 80 times speedup \cite{pattern-matching}. This makes GPU computing have certain advantages in cost and speed, but the research in this area is not as much as the traditional string algorithm. \\
@@ -108,6 +108,9 @@ There are few articles discussing String Matching algorithm on Shared and Distri
 %Parallel String Matching base on coarse grained cluster / cloud
 %Parallel String Matching base on massively parallel cluster
 
+\section{Conclusion} \label{Conclu}
+
+Based on our research, string matching based on parallel algorithm has good performance in theory, especially the GPU-based method can achieve extremely high performance at a considerable cost, and what can multi-thread parallelism and GPU parallelism achieve? Speedup ratio, which is what I want to explore in this project.
 
 
 

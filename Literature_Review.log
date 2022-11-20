@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  8 OCT 2022 01:35
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  14 OCT 2022 19:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -177,23 +177,23 @@ Underfull \hbox (badness 10000) in paragraph at lines 106--110
  []
 
 [2]
-Underfull \hbox (badness 1253) in paragraph at lines 121--122
+Underfull \hbox (badness 1253) in paragraph at lines 124--125
 \OT1/cmr/m/n/10.95 ter-na-tional Con-fer-ence on Smart City; IEEE 4th In-ter-na
 -tional Con-fer-ence on
  []
 
 
-Underfull \hbox (badness 1102) in paragraph at lines 121--122
+Underfull \hbox (badness 1102) in paragraph at lines 124--125
 \OT1/cmr/m/n/10.95 Data Sci-ence and Sys-tems (HPCC/SmartCity/DSS), 2018, pp. 1
 219-1222, doi:
  []
 
 [3] [4] (./Literature_Review.aux) ) 
 Here is how much of TeX's memory you used:
- 1393 strings out of 478268
- 22388 string characters out of 5850339
- 318827 words of memory out of 5000000
- 19630 multiletter control sequences out of 15000+600000
+ 1394 strings out of 478268
+ 22396 string characters out of 5850339
+ 319835 words of memory out of 5000000
+ 19631 multiletter control sequences out of 15000+600000
  474171 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,6n,62p,908b,238s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -202,7 +202,7 @@ ic/amsfonts/cm/cmbx12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfon
 ts/cm/cmr10.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
 2.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><p:/
 texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on Literature_Review.pdf (4 pages, 83867 bytes).
+Output written on Literature_Review.pdf (4 pages, 84778 bytes).
 PDF statistics:
  42 PDF objects out of 1000 (max. 8388607)
  25 compressed objects within 1 object stream
