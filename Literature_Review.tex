@@ -101,7 +101,7 @@ Parallel String Matching base on GPU(CUDA)\\
 Compared with the CPU, modern GPU has huge advantages in parallel computing. A single GPU integrates thousands of computing units, so thousands of parallel computing can be realized on a single GPU. There are also some ways to use CUDA programming provided by Nvidia GPU for String Matching. Giorgos Vasiliadis implements string search and regular expression matching operations for real-time inspection of network packets through the pattern matching library \cite{Bit-Parallel}, And in 2011 it reached a data volume close to 30 Gbit/s. Efficient GPU algorithms can be 30 times faster than a single CPU core, and Approximate String Matching with k Mismatches reports an 80 times speedup \cite{pattern-matching}. This makes GPU computing have certain advantages in cost and speed, but the research in this area is not as much as the traditional string algorithm. \\
 
 Parallel String Matching base on MIMD\\
-MIMD machines can execute multiple instruction streams at the same time. Many modern CPUs belong to this type. In order to fully mobilize multiple instruction streams, targeted parallel algorithms are inevitable. (cont..)\\
+MIMD machines can execute multiple instruction streams at the same time. Many modern CPUs belong to this type. In order to fully mobilize multiple instruction streams, targeted parallel algorithms are inevitable. Hitoshi compared the performance of BLAST+, CLAST and PZLAST algorithms for MIMD processor PEZY-SC2\cite{MIMD}, which are specially optimized for the biological field.\\
 
 Distributed Memory Parallel String Matching\\
 There are few articles discussing String Matching algorithm on Shared and Distributed-Memory Parallel Architectures, except Antonino Tumeo's Aho-Corasick algorithm in 2012 compared and analyzed the distributed memory architecture and shared memory architecture\cite{Distributed-Memory}. Results at the time showed that shared-memory architectures based on multiprocessors were the theoretical best performance, considering cost constraints, GPUs that did not reach the PCI-Express bandwidth limit had the best price/performance ratio. Although distributed can provide sufficient space and computing resources, limited by the cost of communication, the performance of distributed computing is not satisfactory. Nonetheless, this can lead to considerable performance gains, as shown by Panagiotis' work\cite{MPI}.\\
@@ -130,6 +130,8 @@ Based on our research, string matching based on parallel algorithm has good perf
 \bibitem{MPI}P. D. Michailidis and K. G. Margaritis, "Performance Evaluation of Multiple Approximate String Matching Algorithms Implemented with MPI Paradigm in an Experimental Cluster Environment," 2008 Panhellenic Conference on Informatics, 2008, pp. 168-172, doi: 10.1109/PCI.2008.13.
 \bibitem{Butterfly}Someswararao, Chinta. (2012). Parallel Algorithms for String Matching Problem based on Butterfly Model. International Journal of Computer Science and Technology. 
 \bibitem{Distributed-Memory}A. Tumeo, O. Villa and D. G. Chavarria-Miranda, "Aho-Corasick String Matching on Shared and Distributed-Memory Parallel Architectures," in IEEE Transactions on Parallel and Distributed Systems, vol. 23, no. 3, pp. 436-443, March 2012, doi: 10.1109/TPDS.2011.181.
+\bibitem{MIMD}H. Ishikawa et al., "PZLAST: an ultra-fast sequence similarity search tool implemented on a MIMD processor," 2021 Ninth International Symposium on Computing and Networking (CANDAR), 2021, pp. 102-107, doi: 10.1109/CANDAR53791.2021.00021.
+
 \end{thebibliography}
 
 
