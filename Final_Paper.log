@@ -1,0 +1,299 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  5 DEC 2022 17:01
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**Final_Paper.tex
+(./Final_Paper.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-02-24>
+(p:/texlive/2022/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
+(p:/texlive/2022/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count185
+\c@section=\count186
+\c@subsection=\count187
+\c@subsubsection=\count188
+\c@paragraph=\count189
+\c@subparagraph=\count190
+\c@figure=\count191
+\c@table=\count192
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+)
+(p:/texlive/2022/texmf-dist/tex/latex/base/latexsym.sty
+Package: latexsym 1998/08/17 v2.2e Standard LaTeX package (lasy symbols)
+\symlasy=\mathgroup4
+LaTeX Font Info:    Overwriting symbol font `lasy' in version `bold'
+(Font)                  U/lasy/m/n --> U/lasy/b/n on input line 52.
+)
+\c@definition=\count193
+\c@theorem=\count194
+\c@lemma=\count195
+\c@corollary=\count196
+\c@property=\count197
+\c@observation=\count198
+\c@fact=\count199
+\c@algX=\count266
+
+(p:/texlive/2022/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(p:/texlive/2022/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+(p:/texlive/2022/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
+
+(p:/texlive/2022/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(p:/texlive/2022/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+
+(p:/texlive/2022/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen139
+\Gin@req@width=\dimen140
+)
+(p:/texlive/2022/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count267
+\l__pdf_internal_box=\box50
+)
+(./Final_Paper.aux)
+\openout1 = `Final_Paper.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
+LaTeX Font Info:    ... okay on input line 48.
+
+(p:/texlive/2022/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count268
+\scratchdimen=\dimen141
+\scratchbox=\box51
+\nofMPsegments=\count269
+\nofMParguments=\count270
+\everyMPshowfont=\toks17
+\MPscratchCnt=\count271
+\MPscratchDim=\dimen142
+\MPnumerator=\count272
+\makeMPintoPDFobject=\count273
+\everyMPtoPDFconversion=\toks18
+) (p:/texlive/2022/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(p:/texlive/2022/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 69.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 69.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 69.
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 69
+.
+
+(p:/texlive/2022/texmf-dist/tex/latex/base/ulasy.fd
+File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
+)
+Underfull \hbox (badness 10000) in paragraph at lines 84--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--87
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--87
+
+ []
+
+[1
+
+{p:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Underfull \hbox (badness 10000) in paragraph at lines 103--104
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--107
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--110
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 111--113
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--117
+
+ []
+
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 118--120
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 122--124
+
+ []
+
+
+Overfull \hbox (23.93855pt too wide) in paragraph at lines 126--128
+\OT1/cmr/m/n/10.95 com-pared and an-a-lyzed the dis-tributed mem-ory ar-chi-tec
+-ture and shared mem-ory architecture[[]].
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 126--128
+
+ []
+
+[3] [4]
+Underfull \hbox (badness 10000) in paragraph at lines 159--161
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 166--167
+
+ []
+
+[5]
+<Figures/nbible.jpg, id=24, 696.80325pt x 398.08725pt>
+File: Figures/nbible.jpg Graphic file (type jpg)
+<use Figures/nbible.jpg>
+Package pdftex.def Info: Figures/nbible.jpg  used on input line 185.
+(pdftex.def)             Requested size: 289.07999pt x 165.15453pt.
+<Figures/ngeno.jpg, id=25, 693.792pt x 395.67825pt>
+File: Figures/ngeno.jpg Graphic file (type jpg)
+<use Figures/ngeno.jpg>
+Package pdftex.def Info: Figures/ngeno.jpg  used on input line 190.
+(pdftex.def)             Requested size: 289.07999pt x 164.86754pt.
+<Figures/nworst.jpg, id=26, 681.747pt x 386.6445pt>
+File: Figures/nworst.jpg Graphic file (type jpg)
+<use Figures/nworst.jpg>
+Package pdftex.def Info: Figures/nworst.jpg  used on input line 195.
+(pdftex.def)             Requested size: 289.07999pt x 163.953pt.
+<Figures/pbible.jpg, id=27, 695.59875pt x 399.29175pt>
+File: Figures/pbible.jpg Graphic file (type jpg)
+<use Figures/pbible.jpg>
+Package pdftex.def Info: Figures/pbible.jpg  used on input line 203.
+(pdftex.def)             Requested size: 289.07999pt x 165.93451pt.
+ [6 <./Figures/nbible.jpg> <./Figures/ngeno.jpg>] [7 <./Figures/nworst.jpg> <./
+Figures/pbible.jpg>]
+<Figures/pbigtext.jpg, id=35, 687.7695pt x 401.0985pt>
+File: Figures/pbigtext.jpg Graphic file (type jpg)
+<use Figures/pbigtext.jpg>
+Package pdftex.def Info: Figures/pbigtext.jpg  used on input line 213.
+(pdftex.def)             Requested size: 289.07999pt x 168.58873pt.
+<Figures/pcore.jpg, id=36, 702.2235pt x 434.22224pt>
+File: Figures/pcore.jpg Graphic file (type jpg)
+<use Figures/pcore.jpg>
+Package pdftex.def Info: Figures/pcore.jpg  used on input line 218.
+(pdftex.def)             Requested size: 289.07999pt x 178.74783pt.
+<Figures/sbible.jpg, id=37, 693.18974pt x 401.70074pt>
+File: Figures/sbible.jpg Graphic file (type jpg)
+<use Figures/sbible.jpg>
+Package pdftex.def Info: Figures/sbible.jpg  used on input line 223.
+(pdftex.def)             Requested size: 289.07999pt x 167.51791pt.
+ [8 <./Figures/pbigtext.jpg> <./Figures/pcore.jpg>]
+<Figures/sworst.jpg, id=41, 693.18974pt x 384.2355pt>
+File: Figures/sworst.jpg Graphic file (type jpg)
+<use Figures/sworst.jpg>
+Package pdftex.def Info: Figures/sworst.jpg  used on input line 233.
+(pdftex.def)             Requested size: 289.07999pt x 160.23453pt.
+File: Figures/sworst.jpg Graphic file (type jpg)
+<use Figures/sworst.jpg>
+Package pdftex.def Info: Figures/sworst.jpg  used on input line 234.
+(pdftex.def)             Requested size: 289.07999pt x 160.23453pt.
+File: Figures/sworst.jpg Graphic file (type jpg)
+<use Figures/sworst.jpg>
+Package pdftex.def Info: Figures/sworst.jpg  used on input line 235.
+(pdftex.def)             Requested size: 289.07999pt x 160.23453pt.
+File: Figures/sworst.jpg Graphic file (type jpg)
+<use Figures/sworst.jpg>
+Package pdftex.def Info: Figures/sworst.jpg  used on input line 236.
+(pdftex.def)             Requested size: 289.07999pt x 160.23453pt.
+File: Figures/sworst.jpg Graphic file (type jpg)
+<use Figures/sworst.jpg>
+Package pdftex.def Info: Figures/sworst.jpg  used on input line 237.
+(pdftex.def)             Requested size: 289.07999pt x 160.23453pt.
+
+[9 <./Figures/sbible.jpg> <./Figures/sworst.jpg>] [10]
+Underfull \hbox (badness 10000) in paragraph at lines 253--255
+
+ []
+
+[11]
+Underfull \hbox (badness 1253) in paragraph at lines 263--264
+\OT1/cmr/m/n/10.95 ter-na-tional Con-fer-ence on Smart City; IEEE 4th In-ter-na
+-tional Con-fer-ence on
+ []
+
+
+Underfull \hbox (badness 1102) in paragraph at lines 263--264
+\OT1/cmr/m/n/10.95 Data Sci-ence and Sys-tems (HPCC/SmartCity/DSS), 2018, pp. 1
+219-1222, doi:
+ []
+
+[12] [13] (./Final_Paper.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 1532 strings out of 478268
+ 24860 string characters out of 5850339
+ 320008 words of memory out of 5000000
+ 19756 multiletter control sequences out of 15000+600000
+ 474820 words of font info for 48 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 55i,6n,62p,1474b,269s stack positions out of 10000i,1000n,20000p,200000b,200000s
+{p:/texlive/2022/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}<p:/tex
+live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><p:/texlive/2022
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><p:/texlive/2022/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmr10.pfb><p:/texlive/2022/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmr12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmti12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/cm-super/sfrm1095
+.pfb>
+Output written on Final_Paper.pdf (13 pages, 736574 bytes).
+PDF statistics:
+ 91 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
+ 0 named destinations out of 1000 (max. 500000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+
