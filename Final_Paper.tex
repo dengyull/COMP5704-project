@@ -72,7 +72,7 @@ University of Ottawa\\
 % Abstract
 % ############################################################################
 \begin{abstract}
-This project explores CPU-parallel and GPU-parallel implementations of 6 different string-matching algorithms, and evaluates their performance and speed-up rate on natural language text, genomic data, and program-generated data. Most algorithms can benefit from CPU parallelism. achieving 3-10x speedup in 16 threads. GPU performs poorly on small files, and has huge speedups on special data, it has a 2x speedup on the SO algorithms, and 2/3 Cuda cores speedup in the worst case on the brute force algorithms.
+This project explores CPU-parallel and GPU-parallel implementations of 6 different string-matching algorithms, and evaluates their performance and the benefits of parallelizing on natural language text, genomic data, and program-generated data. Most algorithms can benefit from CPU parallelism. achieving 3-10x speedup in 16 threads. GPU performs poorly on small files, and has huge speedups on special data, it has a 2x speedup on the SO algorithms, and 2/3 Cuda cores speedup in the worst case on the brute force algorithms.
 
 \end{abstract}
 
@@ -81,9 +81,9 @@ This project explores CPU-parallel and GPU-parallel implementations of 6 differe
 \section{Introduction} \label{intro}
 % ############################################################################
 
-String Matching is one of the most common problems in computer science, and although Single-pattern algorithms work very well on this problem, the algorithm speed is affected by the linear increase in the size of the matching string, especially when solving Bioinformatics and DNA Sequencing or search engines or content search in large databases, a large amount of data inevitably takes a lot of time. Modern CPUs tend to have a large number of cores, and it is increasingly common to utilize GPUs for data processing. Parallelization has become an important part of algorithm design. Because of the search method of String Matching, it can take full advantage of Parallel Programming to solve large-scale Matching problems efficiently on large-scale systems.\\
-\\This project is to explore the parallel implementation of traditional sequence string matching algorithms and implement its parallel version over cilk and cuda, then compare the optimization methods of string matching algorithms for different parallel architectures. In this project, I implement six different string-matching algorithms in CPU parallel and three in GPU. some of them also use bit parallel or SSE instruction to speed up. I analyze The speedup obtained by different algorithms, and the speedup obtained in the worst case.\\ 
-\\Pattern length and alphabet size influence the effectiveness of different algorithms, choosing the optimal implementation therefore depends on those two parameters. Our evaluation considers different combinations of pattern length and alphabet size. When both parameters are known at runtime this information can be used to choose the optimal algorithm.\\
+String Matching is one of the most common problems in computer science, and although Single-pattern algorithms work very well on this problem, the algorithm speed is affected by the linear increase in the size of the matching string, especially when solving Bioinformatics DNA Sequencing or search engines or content search in large databases, a large amount of data inevitably takes a lot of time. Modern CPUs tend to have a large number of cores, and it is increasingly common to utilize GPUs for data processing. Parallelization has become an important part of algorithm design. Because of the data structure of String Matching, it can take benefits  from Parallel Programming to solve large-scale Matching problems efficiently on large-scale systems.\\
+\\This project is to explore the parallel implementation of traditional sequence string matching algorithms and implement its parallel version over cilk and cuda, then compare the benefit of different string matching algorithms in different parallel architectures. In this project, I implement six different string-matching algorithms in CPU parallel and three in GPU. For algorithms that are difficult to algorithmically parallelize, I partition the index to perform parallel operations. Some of the algorithm takes also use bit parallel or SSE instruction to speed up. I analyze The speedup obtained by different algorithms, and the speedup obtained in the worst case.\\ 
+\\A more effective algorithm can be selected through pattern length analysis and preprocessing. Our results also discuss this point. The data type also has an impact on efficiency. A gene sequence with four letters has more repetitions than natural language, and this repetition will also greatly affect efficiency. We'll also compare different datasets and explore the differences.\\
 
 
 
@@ -94,7 +94,7 @@ String Matching is one of the most common problems in computer science, and alth
 % ############################################################################
 
 
-The definition of the problem of string matching is to find a pattern P  in a text T. we define a pattern that has length p and text that has length t. The pattern and text are based on the same alphabet. The results are the positions of every occurrence of P in T. The input is dynamic, preprocessing of pattern or text have to take place at runtime. Only exact matches are returned, approximate matches or regular expression patterns are not considered.
+A definition of the problem of string matching is to find a pattern P in a text T. we define a pattern that has length p and text that has length t. The pattern and text are based on the same alphabet. The results are the positions of every occurrence of P in T. The input is dynamic, preprocessing of pattern or text have to take place at runtime. Only exact matches are returned, approximate matches or regular expression patterns are not considered.
 
 % ############################################################################
 \section{Literature Review} \label{litrev}
@@ -148,11 +148,19 @@ Boyer-Moore algorithm calculates the bad character rule and the good suffix rule
 The Shift Or algorithm uses bitwise techniques\cite{Matching}, it keeps an array of bits, R, showing if prefixes of the pattern don't match at the current place. Before searching, mismatch arrays are computed for each character in the alphabet and saved in an array, S. For the next position, with the character c, R = shift(R) or S[c]. If the last bit of R is 0, the pattern matches. The runtime is deterministic and in O(n*m).
 
 \subsection{SSEF}\label{SSEF}
-The SSEF algorithm precomputes 65536 filter lists based on the kth bit of each character on the pattern. These filters are then applied efficiently, utilizing SSE instructions, on shifting alignments of pattern and text. SSEF is restricted to patterns with a minimum length of m greater than 32. The worst-case runtime is in O(n*m). If we consider the probability to filter possible matches, SSEF achieves an average runtime in O(n*m/65536).
+The SSEF algorithm precomputes 65536 filter lists based on the kth bit of each character on the pattern. These filters are then applied efficiently, utilizing SSE instructions, on shifting alignments of pattern and text. SSEF is restricted to patterns with a minimum length of m greater than 32. The worst-case runtime is in O(n*m). If we consider the probability to filter possible matches, SSEF achieves an average runtime in O(n*m/65536). The SSEF algorithm doesn't exactly cover all implementations, but it's a good comparison since Philip Pfaffe claims it has the best performance on their evaluation.
 
 \subsection{Exact-Packed-String-Matching}\label{EPSM}
 Exact-Packed-String-Matching (EPSM) was presented in 2013 by Faro and Külekci. EPSM makes use of bit-parallelism by packing several characters into a bit-word and partitioning text T into chunks Ti. These bit-word-sized chunks are compared with a packed pattern bit-word. Shift and bitwise-and operations are used to efficiently compare text chunks with the pattern. Our implementation uses SSE registers as 128 bit words. The asymptotic runtime for the algorithm remains O(n*m).
 
+% usage: \includeFig{label}{file}{caption}
+
+\includeFig{fig2}{Figures/nbible}{Data in bible text}
+% usage: \includeFig{label}{file}{caption}
+
+
+
+\includeFig{fig3}{Figures/ngeno}{Data in Genome}
 % usage: \includeFig{label}{file}{caption}
 
 % ############################################################################
@@ -176,22 +184,14 @@ In the following subsection, I discuss an excerpt of our result data.
 
 \subsection{pattern}\label{pf}
 
-Figure 1 shows the average time to match a pattern of length 32 on the genome data set for six algorithms on a logarithmic scale. We can observe linear scalability with increased thread count. Our FSBNDM implementation requires a minimum of two threads due to space limitations exceeded by the genome data set and the EPSM algorithm is not applicable due to m>8. The content of the patterns has an insignificant impact on performance. The maximum relative standard deviation over the patterns is 3% with a relative range of 9%. Figure 2 shows the average absolute runtimes of six algorithms on the smart-corpora. The algorithms use up to 8 threads. The pattern length is 32. Both SSEF and Hash3 are consistently fast on all seven texts. The relative performance between the algorithms is surprisingly stable.
+
 
 
 
  Figure~\ref{fig2} shows the average absolute runtimes of six algorithms on the smart-corpora. The algorithms use up to 8 threads. The pattern length is 32. Both SSEF and Hash3 are consistently fast on all seven texts. The relative performance between the algorithms is surprisingly stable.
 
 
-First of all, we focus on the impact of threads on algorithms or different speedup ratios. Figure x shows the variation of the running time of the matching algorithm in the Bible text under different numbers of threads, most algorithms are speedup under multi-core, except EPSM, but the speed of EPSM on the parallel has over the sequence. The running speed on CUDA in some algorithm is slightly better than sequence, but it is difficult to exceed the parallel speedup of 16 threads. Figure 2 is the data under the genome file, The conclusion is the same as before, but due to the nature of the genes, The large number of repeat in the small dataset {ATCG}, the running time of the brute force algorithm is increased, while the other algorithms remain stable. Figure 3 shows the poor data being generated. In this case the brute force algorithm takes 15 minutes, most algorithms take seconds, the fastest algorithm are shift or and KR, less than a second. In this case, we can see a significant speedup, with all algorithms achieving a speedup of more than 5X speed up in 32-thread parallel. Surprisingly, the time spent by cuda is much faster than that of cpu parallel in this case. In particular, the brute force algorithm is actually 0.3 seconds, it is over 1500x speedup. This speedup ratio has way higher than all sequential algorithms, means that under normal text, the GPU can hardly exert its performance, and everything is done.
 
-\includeFig{fig2}{Figures/nbible}{Data in bible text}
-% usage: \includeFig{label}{file}{caption}
-
-
-
-\includeFig{fig3}{Figures/ngeno}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
 
 
 
@@ -210,7 +210,7 @@ First of all, we focus on the impact of threads on algorithms or different speed
 
 
 
-\subsection{speed up }\label{sf}
+\subsection{speed up}\label{sf}
 
 
 \includeFig{fig6}{Figures/pbigtext}{Data in Genome}
@@ -226,7 +226,7 @@ First of all, we focus on the impact of threads on algorithms or different speed
 \includeFig{fig8}{Figures/sbible}{Data in Genome}
 % usage: \includeFig{label}{file}{caption}
 
-First of all, we focus on the impact of threads on algorithms or different speedup ratios. Figure x shows the variation of the running time of the matching algorithm in the Bible text under different numbers of threads, most algorithms are speedup under multi-core, except EPSM, but the speed of EPSM on the parallel has over the sequence. The running speed on CUDA in some algorithm is slightly better than sequence, but it is difficult to exceed the parallel speedup of 16 threads. Figure 2 is the data under the genome file, The conclusion is the same as before, but due to the nature of the genes, The large number of repeat in the small dataset {ATCG}, the running time of the brute force algorithm is increased, while the other algorithms remain stable. Figure 3 shows the poor data being generated. In this case the brute force algorithm takes 15 minutes, most algorithms take seconds, the fastest algorithm are shift or and KR, less than a second. In this case, we can see a significant speedup, with all algorithms achieving a speedup of more than 5X speed up in 32-thread parallel. Surprisingly, the time spent by cuda is much faster than that of cpu parallel in this case. In particular, the brute force algorithm is actually 0.3 seconds, it is over 1500x speedup. This speedup ratio has way higher than all sequential algorithms, means that under normal text, the GPU can hardly exert its performance, and everything is done.
+
 
 
  Figure~\ref{fig9} is a
@@ -240,13 +240,13 @@ are ususally created with GnuPlot.
 \includeFig{fig13}{Figures/sworst}{Data in Genome}
 
 
-First of all, we focus on the impact of threads on algorithms or different speedup ratios. Figure x shows the variation of the running time of the matching algorithm in the Bible text under different numbers of threads, most algorithms are speedup under multi-core, except EPSM, but the speed of EPSM on the parallel has over the sequence. The running speed on CUDA in some algorithm is slightly better than sequence, but it is difficult to exceed the parallel speedup of 16 threads. Figure 2 is the data under the genome file, The conclusion is the same as before, but due to the nature of the genes, The large number of repeat in the small dataset {ATCG}, the running time of the brute force algorithm is increased, while the other algorithms remain stable. Figure 3 shows the poor data being generated. In this case the brute force algorithm takes 15 minutes, most algorithms take seconds, the fastest algorithm are shift or and KR, less than a second. In this case, we can see a significant speedup, with all algorithms achieving a speedup of more than 5X speed up in 32-thread parallel. Surprisingly, the time spent by cuda is much faster than that of cpu parallel in this case. In particular, the brute force algorithm is actually 0.3 seconds, it is over 1500x speedup. This speedup ratio has way higher than all sequential algorithms, means that under normal text, the GPU can hardly exert its performance, and everything is done.
+
 
 % usage: \includeFig{label}{file}{caption}
 
-To assess the practicality of our implementations we compare our runtimes against the performance of grep. In Fig. 4 we show the relative speedups over different pattern lengths on the human genome data set on a logarithmic scale. In the case where we are limited to one thread, we can achieve a performance increase for pattern lengths between 4 and 128. However grep outperforms our implementations for patterns with m==2 or m==256. If we utilize eight threads we can achieve significant speedups of up to 16.7× for all patterns with m==2. SSEF, EBOM and Hash3 all perform consistently well on this data set.
 
-Figure 5 shows the speedups of our implementations over the reference implementations found in the smart-corpora. The speedups are displayed on a logarithmic scale. The baseline for each algorithm is the corresponding reference implementation. In contrast to speedups on the human genome data set, only the EPSM, KMP and Shift-Or implementations benefit from an increased thread count on this smaller data set. However our modifications to the SSEF implementation result in a significant speedup even in the sequential case.
+
+
 
 
 % ############################################################################
