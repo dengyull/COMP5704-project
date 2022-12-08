@@ -131,7 +131,7 @@ There are few articles discussing String Matching algorithm on Shared and Distri
 A definition of the problem of string matching is to find a pattern P in a text T. we define a pattern that has length p and text that has length t. The pattern and text are based on the same alphabet. The results are the positions of every occurrence of P in T. The input is dynamic, preprocessing of pattern or text have to take place at runtime. Only exact matches are returned, approximate matches or regular expression patterns are not considered.
 
 % ############################################################################
-\section{Proposed Solution.} \label{proposedSolution}
+\section{Implementation} \label{proposedSolution}
 % ############################################################################
 
 The algorithms we explore range from the most basic brute force algorithms, partial optimization algorithms to modern advanced algorithms using SSE and bit parallelism. In the parallel implementation of the algorithm, except for the Brute Force algorithm, which is a direct parallel loop, the CPU of other algorithms uses the method of index segmentation in parallel, so that each thread is allocated to a string of t/c+p, thereby realizing parallel operations. The gpu only implements the parallel implementation of Brute Force and Boyer-Moore. Some of the algorithms use the SSE instruction set to improve bit parallelism. The following subsections provide a brief overview of the implemented algorithms.
