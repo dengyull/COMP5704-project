@@ -88,31 +88,23 @@ String Matching is one of the most common problems in computer science, and alth
 
 
 
-
-% ############################################################################
-\section{Problem Statement} \label{problemStatement}
-% ############################################################################
-
-
-A definition of the problem of string matching is to find a pattern P in a text T. we define a pattern that has length p and text that has length t. The pattern and text are based on the same alphabet. The results are the positions of every occurrence of P in T. The input is dynamic, preprocessing of pattern or text have to take place at runtime. Only exact matches are returned, approximate matches or regular expression patterns are not considered.
-
 % ############################################################################
 \section{Literature Review} \label{litrev}
 % ############################################################################
 
 String Matching is an important problem in computer science, and many people continue to study it. The most recent comparison was Philip Pfaffe, who discussed 7 parallelized string matching algorithms based on SIMD\cite{Matching}. There are different architectures according to Flynn classification, and for different architectures, there have different methods to minimize latency and improve performance. This study compares the advantages and disadvantages of different architectures in solving string-matching problems and measures the performance of CPU parallelism and GPU parallelism. \\
 
-\includeFig{fig1}{Figures/example}{example}
+\includeFig{fig1}{Figures/example}{String Matching wants to find the pattern from Text}
 % usage: \includeFig{label}{file}{caption}
 
-\subsection{Simple String Matching}\label{Simple}
+\subsection{Sequential String Matching}\label{Simple}
 String Matching is one of the common fundamental problems, and many algorithms have been proposed to solve it. Faster solutions were proposed as early as 1977, the kmp algorithm and the Boyer–Moore algorithm\cite{Matching}. Since 1970, more than 80 String Matching algorithms have been proposed. Based on previous research those algorithm deformations, combinations, and expansion, String Matching has been continuously optimized. Now, using parallelized algorithms to improve performance is a more mainstream method\cite{Matching}, nonetheless, can benefit from the ideas of these Simple optimization algorithms. By exploring the details of these algorithms, the efficiency of parallelized algorithms can be further improved. \\
 
-\subsection{Multiple core(threads) Parallel String Matching}\label{Multiple}
-Parallel computing has great potential and extremely high scalability. Making good use of parallel computing can greatly speed up the calculation speed. Although not all algorithms can benefit from parallel computing, especially some dynamic programming algorithms. Specific to the String Matching algorithm, this requires us to study, compared to the complex single-threaded optimization, to what extent does parallelism improve the operating efficiency? \\
+\subsection{Parallel String Matching}\label{Multiple}
+Parallel computing has great potential and extremely high scalability. Making good use of parallel computing can greatly speed up the calculation speed. Although not all algorithms can benefit from parallel computing. Specific to the String Matching algorithm, It can be parallelized from data input, It is also possible to parallelize certain operations. For different algorithms, we have to analyze what kind of speedup we achieved in different numbers of threads and calculate the best core utilization.\\
 
 Parallel String Matching base on MISD\\
-Although there exist MISD architectures dedicated to pattern matching that can be used to solve string match such as Halaas's recursive architecture \cite{MISD} could match up to 127 patterns at a clock frequency of 100 MHz, there is not much research in this area , it has not shown better performance for single pattern. MISD processors also lack practical applications, and research in this area has been shelved. \\
+Although there exist MISD architectures dedicated to pattern matching that can be used to solve string match such as Halaas's recursive architecture \cite{MISD} could match up to 127 patterns at a clock frequency of 100 MHz, there is not much research in this area , it has not shown better performance for single pattern, Its performance is about the same as a 1GHZ single core CPU. MISD processors also lack practical applications, and research in this area has been shelved. \\
 
 
 Parallel String Matching base on SIMD\\
@@ -129,26 +121,36 @@ MIMD machines can execute multiple instruction streams at the same time. Many mo
 Distributed Memory Parallel String Matching\\
 There are few articles discussing String Matching algorithm on Shared and Distributed-Memory Parallel Architectures, except Antonino Tumeo's Aho-Corasick algorithm in 2012 compared and analyzed the distributed memory architecture and shared memory architecture\cite{Distributed-Memory}. Results at the time showed that shared-memory architectures based on multiprocessors were the theoretical best performance, but there is an upper limit to the amount of parallelism, at 80 threads he starts to get degraded speedup, beyond 96 threads the speedup becomes marginal. considering cost constraints, GPUs that did not reach the PCI-Express bandwidth limit had the best price/performance ratio. The performance of gpu has developed several times in the past ten years, and theoretically its performance is far faster than that of cpu by now. Although distributed can provide sufficient space and computing resources, limited by the cost of communication, the performance of distributed computing is not satisfactory. Especially for a single match problem. Nonetheless, this can lead to considerable performance gains for multiple search, as shown by Panagiotis' work\cite{MPI}, In a 16-processor cluster, the matching time can be reduced by half of the original.\\
 
+
+
+% ############################################################################
+\section{Problem Statement} \label{problemStatement}
+% ############################################################################
+
+
+A definition of the problem of string matching is to find a pattern P in a text T. we define a pattern that has length p and text that has length t. The pattern and text are based on the same alphabet. The results are the positions of every occurrence of P in T. The input is dynamic, preprocessing of pattern or text have to take place at runtime. Only exact matches are returned, approximate matches or regular expression patterns are not considered.
+
 % ############################################################################
 \section{Proposed Solution.} \label{proposedSolution}
 % ############################################################################
 
 The algorithms we explore range from the most basic brute force algorithms, partial optimization algorithms to modern advanced algorithms using SSE and bit parallelism. In the parallel implementation of the algorithm, except for the Brute Force algorithm, which is a direct parallel loop, the CPU of other algorithms uses the method of index segmentation in parallel, so that each thread is allocated to a string of t/c+p, thereby realizing parallel operations. The gpu only implements the parallel implementation of Brute Force and Boyer-Moore. Some of the algorithms use the SSE instruction set to improve bit parallelism. The following subsections provide a brief overview of the implemented algorithms.
 
+
 \subsection{Brute Force}\label{bf}
-Basic Brute Force algorithm, Brute Force means the worst algorithm in most problems. But that's not exactly the case in String Matching Problem. In the average case, Brute Force takes O (P + T) steps. The result reflected in the experiment is that in some natural language searches, the Brute Force algorithm faster than some algorithms. But there's no way to avoid bad worst-case outcomes, and no speedups from the pattern. 
+The basic Brute Force algorithm compares the pattern to the text, one character at a time until unmatching characters are found. Brute Force means the worst algorithm in most problems. But that's not exactly the case in String Matching Problem. In the average case, Brute Force takes O (P + T) steps. The result reflected in the experiment is that in some natural language searches, the Brute Force algorithm faster than some algorithms. But there's no way to avoid bad worst-case outcomes. In the worst case, the Brute Force algorithm requires (p*t) steps, which is unacceptable in large searches. Many algorithms benefit from the pattern to avoid the worst case.
 
 \subsection{KMP algorithm}\label{kmp}
-KMP algorithm, a well-known early optimization algorithm, KMP calculates the number of times it can skip each time it reads a string, It uses a preprocessing phase on the pattern to build a partial match table. Although this avoids the worst result, it has a lot of calculations at the same time, so KMP can’t speed up too much. Excellent performance in some cases, but doesn’t take high scores in most cases. relatively, due to more calculations, it get more benefit from parallelism.
+KMP algorithm, a well-known early optimization algorithm, KMP calculates the number of times it can skip each time it reads a string, It uses a preprocessing phase on the pattern to build a partial match table. Although this avoids the worst result, In theory, KMP has a time cost of O(t), but due to the calculations at the same time, KMP can’t speed up too much. Excellent performance in some cases, but doesn’t take high scores in most cases. relatively, due to more calculations, it gets more benefit from parallelism.
 
 \subsection{Boyer-Moore}\label{bm}
-Boyer-Moore algorithm calculates the bad character rule and the good suffix rule, and matches from the last index to the front. Therefore, it can skip some unmatched results and thus exceed linear time in algorithm analysis for most natural languages and large pattern capacity matching problems with better speedup than KMP. it has (p) Preprocessing time and  (t/p) at best, O(p*t) at the worst Matching time, require (p) space to store the good and bad rule.
+Boyer-Moore algorithm calculates the bad character rule and the good suffix rule, and matches from the last index to the front. Therefore, it can skip some unmatched results and thus exceed linear time in algorithm analysis for most natural languages and large pattern capacity matching problems with better speedup than KMP. it has (p) Preprocessing time and  (t/p) at best, O(p*t) at the worst Matching time, and require (p) space to store the good and bad rule.
 
-\subsection{Rabin-Karp}\label{bm}
-The RabinKarp algorithm gets inspiration from the hash function. When scanning strings for comparison, it uses the hash value generated by Rolling hash comparison instead of directly comparing strings. This avoids directly scanning the entire pattern. Only strings with the same hash can be compared. A full scan will be performed. Because the hash is fixed, the speed of the algorithm depends on the hash function and the string alphabet. The worst result is still mn, but as a heuristic algorithm, it is faster than the expected value of the brute force algorithm.
+\subsection{Rabin-Karp}\label{rk}
+The Rabin-Karp algorithm gets inspiration from the hash function. When scanning strings for comparison, it uses the hash value generated by Rolling hash comparison instead of directly comparing strings. This avoids directly scanning the entire pattern. Only strings with the same hash can be compared. A full scan will be performed. Because the hash is fixed, the speed of the algorithm depends on the hash function and the string alphabet. The worst result is still mn, but as a heuristic algorithm, it is faster than the expected value of the brute force algorithm.
 
 \subsection{Shift-Or}\label{so}
-The Shift Or algorithm uses bitwise techniques\cite{Matching}, it keeps an array of bits, R, showing if prefixes of the pattern don't match at the current place. Before searching, mismatch arrays are computed for each character in the alphabet and saved in an array, S. For the next position, with the character c, R = shift(R) or S[c]. If the last bit of R is 0, the pattern matches. The runtime is deterministic and in O(n*m).
+The Shift Or algorithm uses bitwise techniques\cite{Matching}, it keeps an array of bits, R, showing if prefixes of the pattern don't match at the current place. Before searching, mismatch arrays are computed for each character in the alphabet and saved in an array, S. For the next position, with the character c, R = shift(R) or S[c]. If the last bit of R is 0, the pattern matches. The runtime is deterministic and in O(n*m). Nevertheless, it is fast operation due to bit parallelism.
 
 \subsection{SSEF}\label{SSEF}
 The SSEF algorithm precomputes 65536 filter lists based on the kth bit of each character on the pattern. These filters are then applied efficiently, utilizing SSE instructions, on shifting alignments of pattern and text. SSEF is restricted to patterns with a minimum length of m greater than 32. The worst-case runtime is in O(n*m). If we consider the probability to filter possible matches, SSEF achieves an average runtime in O(n*m/65536). The SSEF algorithm doesn't exactly cover all implementations, but it's a good comparison since Philip Pfaffe claims it has the best performance on their evaluation.
@@ -158,13 +160,7 @@ Exact-Packed-String-Matching (EPSM) was presented in 2013 by Faro and Külekci. 
 
 % usage: \includeFig{label}{file}{caption}
 
-\includeFig{fig2}{Figures/nbible}{Data in bible text}
-% usage: \includeFig{label}{file}{caption}
-
-
-
-\includeFig{fig3}{Figures/ngeno}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
+\includeFig{fig2}{Figures/fig2}{Runtime of seven algorithms for 1,2,4, 8, 16, 32, and 64 patterns. natural language text (bible).}
 
 % ############################################################################
 \section{Experimental Evaluation} \label{expEval}
@@ -178,67 +174,42 @@ A sample of natural language (the text of the Bible)
 A set of genome sequences (consisting of four letters)
 
 Extreme data generated by some programs (lots of repetitive text)\\
-
-In order to evaluate the benefits of parallelization, the input file is directly read into memory completely, and then my algorithm is run on a number of 1, 2, 4, 8, 16, 32 threads, and their respective running times are recorded. And test patterns with lengths of 2, 4, 8, 16, 32, and 1000.\\
+In order to evaluate the benefits of parallelization, the input file is directly read into memory completely to reduce I/O latencies, and then my algorithm is run on a number of 1, 2, 4, 8, 16, 32 threads, and their respective running times are recorded. And test patterns with lengths of 2, 4, 8, 16, 32, 64 and 1000.\\
 All CPU parallel experiments were performed on AMD ryzen9 3950x and compiled by opencilk. The CPU has 16 CPU cores (32 hardware threads) clocked at 4.1GHz. The GPU is based on nVidia RTX 2070 8GB running on the latest CUDA 22.04.\\
 In the following subsection, I discuss an excerpt of our result data.
 
 
 
-\subsection{pattern}\label{pf}
+\includeFig{fig3}{Figures/fig3}{Runtime of seven algorithms for 1,2,4, 8, 16, 32, and 64 patterns. genome data set.}
+\includeFig{fig4}{Figures/fig4}{Runtime of seven algorithms for 1,2,4, 8, 16, and 1000 patterns.complex generated data set.}
+\subsection{Pattern}\label{pf}
+
+\includeFig{fig5}{Figures/fig5}{Runtime of seven algorithms for 1,2,4, 8, 16, and 32 threads. Genome data set, complex generated data sett, pattern length of 32.}
+
+\includeFig{fig6}{Figures/tbible}{Runtime of seven algorithms for 1,2,4, 8, 16, and 32 threads. natural language text, pattern length of 32.}
+
+\includeFig{fig7}{Figures/ngeno}{Runtime of seven algorithms for 1,2,4, 8, 16, and 32 threads. Genome data set, pattern length of 32.}
+
+This is about the impact of pattern on parallel performance. When I want to analyze the benefits of threads, I want to find a relatively stable pattern as an input. Figure 2,3,4 is our test result, we can see that in our test, it is indeed affected Very short pattern (pattern less than 4) does have a certain impact on the algorithm, but when pattern greater than 8, only the Boyer-Moore algorithm benefits from it, and the impact on other algorithms is marginal. \\
+However, in the worst case, brute force and epsm increase the running time significantly with the increase of patterns, while the KMP algorithm remains stable. This is due to the fact that epsm partitions the text T into blocks to use bit parallelism compared to packed mode bitwords. Due to the characteristics of memory comparison, the length of each comparison using bit parallelism is fixed, and the advantages cannot be utilized for large patterns., a disadvantage of use bit parallelism. However, KMP does not increase the running time because it can jump enough distance each time. Of course, in this case, the running time of the brute force algorithm reached 15 minutes, which is why we cannot directly use the brute force algorithm, the running time in this case is unacceptable.
 
 
 
 
-
- Figure~\ref{fig2} shows the average absolute runtimes of six algorithms on the smart-corpora. The algorithms use up to 8 threads. The pattern length is 32. Both SSEF and Hash3 are consistently fast on all seven texts. The relative performance between the algorithms is surprisingly stable.
-
+\subsection{Thread }\label{tf}
 
 
+We focus on the impact of threads on algorithms or different speedup ratios. Figure x shows the variation of the running time of the matching algorithm in the Bible text under different numbers of threads, most algorithms are speedup under multi-core, except EPSM, but the speed of EPSM on the parallel has over the sequence. The running speed on CUDA in some algorithm is slightly better than sequence, but it is difficult to exceed the parallel speedup of 16 threads. Figure 2 is the data under the genome file,  due to the nature of the genes, The large number of repeat in the small dataset {ATCG}, the running time of the brute force algorithm is increased, while the other algorithms remain stable. Figure 3 shows the poor data being generated. In this case the brute force algorithm takes 15 minutes, most algorithms take seconds, the fastest algorithm are shift or and KR, less than a second. In this case, we can see a significant speedup, with all algorithms achieving a speedup of more than 5X speed up in 32-thread parallel. The time spent by cuda is much faster than that of cpu parallel in this case. In particular, the brute force algorithm is actually 0.3 seconds, it is over 1500x speedup. This speedup ratio has way higher than all sequential algorithms, means that under normal text, the GPU can hardly exert its performance, and everything is done.
 
 
+\includeFig{fig8}{Figures/sbible}{Runtime of seven algorithms for 1,2,4, 8, 16, and 32 threads. natural language text, pattern length of 1.}
+\includeFig{fig9}{Figures/genospeedup}{Runtime of seven algorithms for 1,2,4, 8, 16, and 32 threads. Genome data set, complex generated data sett, pattern length of 32.}
+\includeFig{fig10}{Figures/sworst}{Runtime of seven algorithms for 1,2,4, 8, 16, and 32 threads. Genome data set, pattern length of 32.}
 
-\includeFig{fig4}{Figures/nworst}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
+\subsection{Speed up}\label{su}
 
-
-
-\subsection{thread }\label{tf}
-
-
-\includeFig{fig5}{Figures/pbible}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
-
-First of all, we focus on the impact of threads on algorithms or different speedup ratios. Figure x shows the variation of the running time of the matching algorithm in the Bible text under different numbers of threads, most algorithms are speedup under multi-core, except EPSM, but the speed of EPSM on the parallel has over the sequence. The running speed on CUDA in some algorithm is slightly better than sequence, but it is difficult to exceed the parallel speedup of 16 threads. Figure 2 is the data under the genome file, The conclusion is the same as before, but due to the nature of the genes, The large number of repeat in the small dataset {ATCG}, the running time of the brute force algorithm is increased, while the other algorithms remain stable. Figure 3 shows the poor data being generated. In this case the brute force algorithm takes 15 minutes, most algorithms take seconds, the fastest algorithm are shift or and KR, less than a second. In this case, we can see a significant speedup, with all algorithms achieving a speedup of more than 5X speed up in 32-thread parallel. Surprisingly, the time spent by cuda is much faster than that of cpu parallel in this case. In particular, the brute force algorithm is actually 0.3 seconds, it is over 1500x speedup. This speedup ratio has way higher than all sequential algorithms, means that under normal text, the GPU can hardly exert its performance, and everything is done.
-
-
-
-\subsection{speed up}\label{sf}
-
-
-\includeFig{fig6}{Figures/pbigtext}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
-
-
-
-\includeFig{fig7}{Figures/pcore}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
-
-
-
-\includeFig{fig8}{Figures/sbible}{Data in Genome}
-% usage: \includeFig{label}{file}{caption}
-
-
-
-
- Figure~\ref{fig9} is a
-typical example of an experimental evaluation result. Such graphs
-are ususally created with GnuPlot.
-
-\includeFig{fig9}{Figures/sworst}{Data in Genome}
-
-
+Now let's look at the speedup. The speedup ratio in normal text is not high. On average, the speedup ratio can only reach less than half of the number of cores. When there are 32 threads, the performance of the RabinKrap algorithm even drops slightly, while the KMP algorithm achieves a good speedup ratio. And the brute force algorithm speeds up poorly. \\
+But in the worst text, the brute force algorithm has achieved a good speedup ratio, which is not without cost, and the time spent dropping from 10 minutes to 40 seconds is still unacceptable. In contrast, the speedup achieved by KMP and RabinKrap is not high, but it is far more than other algorithms, KMP even came to the third place in speed in this case
 
 
 % usage: \includeFig{label}{file}{caption}
@@ -252,8 +223,28 @@ are ususally created with GnuPlot.
 \section{Conclusions} \label{concl}
 % ############################################################################
 
-I sliced the index according to the number of threads to do parallel versions of six different string matching algorithms, and compared to the version on the GPU, I tested on different types and sizes of datasets. In the worst case, the GPU best achieves a speedup that matches the number of cudas in the brute-force algorithm, on average in normal text has 4x speedup. The general algorithm only has a 2x speedup on the GPU. I observed the effect of the pattern size on the string matching algorithm. For short patterns, EPSM has far better performance than parallel performance, while larger patterns favor SSEF. This is because the EPSM using bit parallelism only needs one instruction to compare within the range allowed by the memory, and the excess part still needs to be searched by loop. This shortcoming is made up for in SSEF, but due to the existence of filter list, SSEF cannot guarantee to find all the solutions. Most algorithms can benefit from CPU parallelism except for EPSM. achieving 3-10x speedup in 16 threads. In the worst case EPSM can also benefit from parallelism.\\
-\\Therefore, through the analysis of the pattern, it's able to select a better method for the String Matching problem. In the future, we can develop a tool to analyze the pattern and provide the optimal solution by choosing a better method for string comparison.
+I sliced the index according to the number of threads to do parallel versions of six different string-matching algorithms, and compared to the version on the GPU, I tested on different types and sizes of datasets.  Most algorithms can benefit from CPU parallelism except for EPSM. achieving 3-10x speedup in 16 threads. Brute force algorithms benefit most from parallelism, and parallel brute force algorithms perform best on most natural texts, Followed by EPSM. While sequential EPSM has the best performance in genetics and generated text, it cannot benefit from parallelism except for the worst case. In the worst case, the GPU best achieves a speedup that matches the number of Cuda cores in the brute-force algorithm, on the average normal text has a 4x speedup. In the general case, the algorithm only has a 2x speedup on the GPU. I observed the effect of the pattern size on the string matching algorithm. For short patterns, EPSM has far better performance than parallel performance, In my case only the worst case is seen to speed up the algorithm by parallelism. while for 1000 patterns SSEF is better than EPSM. This is because the EPSM using bit parallelism only needs one instruction to compare within the range allowed by the memory, and the excess part still needs to be searched by the loop. This shortcoming is made up for in SSEF, but due to the existence of the filter list, SSEF cannot guarantee to find all the solutions. Even in this case, EPSM still has good performance and is the second best.\\
+\\Therefore, through the analysis of the pattern, it's able to select a better method for the String Matching problem. In the future, I plan to analyze the pattern and provide the optimal solution by choosing a better method for string comparison.
+
+
+
+%\includeFig{fig2}{Figures/nbible}{Data in bible text}
+% usage: \includeFig{label}{file}{caption}
+
+
+
+%\includeFig{fig3}{Figures/ngeno}{Data in Genome}
+% usage: \includeFig{label}{file}{caption}
+
+
+
+%\includeFig{fig5}{Figures/pbible}{Data in Genome}
+% usage: \includeFig{label}{file}{caption}
+
+
+
+
+%\includeFig{fig9}{Figures/sworst}{Data in Genome}
 
 
 
