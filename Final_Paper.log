@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  8 DEC 2022 19:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  9 DEC 2022 13:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -108,176 +108,172 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 69.
+(Font)              <12> on input line 71.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 69.
+(Font)              <8> on input line 71.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 69.
-LaTeX Font Info:    Trying to load font information for U+lasy on input line 69
+(Font)              <6> on input line 71.
+LaTeX Font Info:    Trying to load font information for U+lasy on input line 71
 .
 
 (p:/texlive/2022/texmf-dist/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-Underfull \hbox (badness 10000) in paragraph at lines 84--87
+Underfull \hbox (badness 10000) in paragraph at lines 86--89
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--87
+Underfull \hbox (badness 10000) in paragraph at lines 86--89
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 84--87
+Underfull \hbox (badness 10000) in paragraph at lines 86--89
 
  []
 
 [1
 
 {p:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
+Underfull \hbox (badness 10000) in paragraph at lines 97--98
 
  []
 
 <Figures/example.jpg, id=12, 681.747pt x 227.6505pt>
 File: Figures/example.jpg Graphic file (type jpg)
 <use Figures/example.jpg>
-Package pdftex.def Info: Figures/example.jpg  used on input line 97.
+Package pdftex.def Info: Figures/example.jpg  used on input line 100.
 (pdftex.def)             Requested size: 289.07999pt x 96.53307pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 101--102
-
- []
-
 
 Underfull \hbox (badness 10000) in paragraph at lines 104--105
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 106--108
+Underfull \hbox (badness 10000) in paragraph at lines 107--108
 
  []
 
 [2 <./Figures/example.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 110--112
+Underfull \hbox (badness 10000) in paragraph at lines 114--115
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 113--115
+Underfull \hbox (badness 10000) in paragraph at lines 117--118
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 117--119
+Underfull \hbox (badness 10000) in paragraph at lines 121--122
 
  []
 
-
-Overfull \hbox (23.93855pt too wide) in paragraph at lines 121--123
+[3]
+Overfull \hbox (23.93855pt too wide) in paragraph at lines 125--126
 \OT1/cmr/m/n/10.95 com-pared and an-a-lyzed the dis-tributed mem-ory ar-chi-tec
 -ture and shared mem-ory architecture[[]].
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 121--123
+Underfull \hbox (badness 10000) in paragraph at lines 125--126
 
  []
 
-[3] [4]
-<Figures/fig2.jpg, id=22, 714.2685pt x 437.2335pt>
+[4] [5]
+<Figures/fig2.jpg, id=25, 714.2685pt x 437.2335pt>
 File: Figures/fig2.jpg Graphic file (type jpg)
 <use Figures/fig2.jpg>
-Package pdftex.def Info: Figures/fig2.jpg  used on input line 164.
+Package pdftex.def Info: Figures/fig2.jpg  used on input line 169.
 (pdftex.def)             Requested size: 289.07999pt x 176.9585pt.
-<Figures/fig3.jpg, id=23, 744.98325pt x 455.90324pt>
+<Figures/fig3.jpg, id=26, 744.98325pt x 455.90324pt>
 File: Figures/fig3.jpg Graphic file (type jpg)
 <use Figures/fig3.jpg>
-Package pdftex.def Info: Figures/fig3.jpg  used on input line 166.
+Package pdftex.def Info: Figures/fig3.jpg  used on input line 171.
 (pdftex.def)             Requested size: 289.07999pt x 176.90414pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 171--173
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 178--179
-
- []
-
 <Figures/fig4.jpg, id=27, 754.61925pt x 469.755pt>
 File: Figures/fig4.jpg Graphic file (type jpg)
 <use Figures/fig4.jpg>
-Package pdftex.def Info: Figures/fig4.jpg  used on input line 186.
+Package pdftex.def Info: Figures/fig4.jpg  used on input line 172.
 (pdftex.def)             Requested size: 289.07999pt x 179.95667pt.
-<Figures/fig5.jpg, id=28, 681.747pt x 386.6445pt>
-File: Figures/fig5.jpg Graphic file (type jpg)
-<use Figures/fig5.jpg>
-Package pdftex.def Info: Figures/fig5.jpg  used on input line 187.
-(pdftex.def)             Requested size: 289.07999pt x 163.953pt.
-<Figures/tbible.jpg, id=29, 711.8595pt x 419.76825pt>
-File: Figures/tbible.jpg Graphic file (type jpg)
-<use Figures/tbible.jpg>
-Package pdftex.def Info: Figures/tbible.jpg  used on input line 191.
-(pdftex.def)             Requested size: 289.07999pt x 170.46637pt.
-<Figures/ngeno.jpg, id=30, 710.655pt x 446.8695pt>
-File: Figures/ngeno.jpg Graphic file (type jpg)
-<use Figures/ngeno.jpg>
-Package pdftex.def Info: Figures/ngeno.jpg  used on input line 193.
-(pdftex.def)             Requested size: 289.07999pt x 181.77893pt.
-[6 <./Figures/fig2.jpg>]
-<Figures/sbible.jpg, id=34, 712.46175pt x 492.6405pt>
-File: Figures/sbible.jpg Graphic file (type jpg)
-<use Figures/sbible.jpg>
-Package pdftex.def Info: Figures/sbible.jpg  used on input line 207.
-(pdftex.def)             Requested size: 289.07999pt x 199.89417pt.
-<Figures/genospeedup.jpg, id=35, 732.93825pt x 495.0495pt>
-File: Figures/genospeedup.jpg Graphic file (type jpg)
-<use Figures/genospeedup.jpg>
-Package pdftex.def Info: Figures/genospeedup.jpg  used on input line 208.
-(pdftex.def)             Requested size: 289.07999pt x 195.25912pt.
-<Figures/sworst.jpg, id=36, 741.972pt x 486.01575pt>
-File: Figures/sworst.jpg Graphic file (type jpg)
-<use Figures/sworst.jpg>
-Package pdftex.def Info: Figures/sworst.jpg  used on input line 209.
-(pdftex.def)             Requested size: 289.07999pt x 189.35255pt.
- [7 <./Figures/fig3.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 229--231
+
+Underfull \hbox (badness 10000) in paragraph at lines 177--179
 
  []
 
-[8 <./Figures/fig4.jpg>]
-Underfull \hbox (badness 1253) in paragraph at lines 259--260
+
+Underfull \hbox (badness 10000) in paragraph at lines 185--186
+
+ []
+
+<Figures/tbible.jpg, id=28, 711.8595pt x 419.76825pt>
+File: Figures/tbible.jpg Graphic file (type jpg)
+<use Figures/tbible.jpg>
+Package pdftex.def Info: Figures/tbible.jpg  used on input line 190.
+(pdftex.def)             Requested size: 289.07999pt x 170.46637pt.
+<Figures/ngeno.jpg, id=29, 710.655pt x 446.8695pt>
+File: Figures/ngeno.jpg Graphic file (type jpg)
+<use Figures/ngeno.jpg>
+Package pdftex.def Info: Figures/ngeno.jpg  used on input line 191.
+(pdftex.def)             Requested size: 289.07999pt x 181.77893pt.
+[6 <./Figures/fig2.jpg>]
+<Figures/fig5.jpg, id=33, 699.8145pt x 422.7795pt>
+File: Figures/fig5.jpg Graphic file (type jpg)
+<use Figures/fig5.jpg>
+Package pdftex.def Info: Figures/fig5.jpg  used on input line 193.
+(pdftex.def)             Requested size: 289.07999pt x 174.63737pt.
+ [7 <./Figures/fig3.jpg>]
+<Figures/sbible.jpg, id=38, 712.46175pt x 492.6405pt>
+File: Figures/sbible.jpg Graphic file (type jpg)
+<use Figures/sbible.jpg>
+Package pdftex.def Info: Figures/sbible.jpg  used on input line 205.
+(pdftex.def)             Requested size: 289.07999pt x 199.89417pt.
+<Figures/genospeedup.jpg, id=39, 732.93825pt x 495.0495pt>
+File: Figures/genospeedup.jpg Graphic file (type jpg)
+<use Figures/genospeedup.jpg>
+Package pdftex.def Info: Figures/genospeedup.jpg  used on input line 206.
+(pdftex.def)             Requested size: 289.07999pt x 195.25912pt.
+<Figures/sworst.jpg, id=40, 741.972pt x 486.01575pt>
+File: Figures/sworst.jpg Graphic file (type jpg)
+<use Figures/sworst.jpg>
+Package pdftex.def Info: Figures/sworst.jpg  used on input line 207.
+(pdftex.def)             Requested size: 289.07999pt x 189.35255pt.
+ [8 <./Figures/fig4.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 227--229
+
+ []
+
+[9 <./Figures/tbible.jpg>]
+Underfull \hbox (badness 1253) in paragraph at lines 239--240
 \OT1/cmr/m/n/10.95 ter-na-tional Con-fer-ence on Smart City; IEEE 4th In-ter-na
 -tional Con-fer-ence on
  []
 
 
-Underfull \hbox (badness 1102) in paragraph at lines 259--260
+Underfull \hbox (badness 1102) in paragraph at lines 239--240
 \OT1/cmr/m/n/10.95 Data Sci-ence and Sys-tems (HPCC/SmartCity/DSS), 2018, pp. 1
 219-1222, doi:
  []
 
-[9 <./Figures/fig5.jpg>] [10 <./Figures/tbible.jpg>] [11 <./Figures/ngeno.jpg>]
-[12 <./Figures/sbible.jpg> <./Figures/genospeedup.jpg>] [13 <./Figures/sworst.j
-pg>] (./Final_Paper.aux) ) 
+[10 <./Figures/ngeno.jpg>] [11 <./Figures/fig5.jpg>] [12 <./Figures/sbible.jpg>
+] [13 <./Figures/genospeedup.jpg> <./Figures/sworst.jpg>] (./Final_Paper.aux) )
+ 
 Here is how much of TeX's memory you used:
- 1559 strings out of 478268
- 25367 string characters out of 5850339
- 321059 words of memory out of 5000000
- 19782 multiletter control sequences out of 15000+600000
- 474479 words of font info for 47 fonts, out of 8000000 for 9000
+ 1560 strings out of 478268
+ 25385 string characters out of 5850339
+ 320059 words of memory out of 5000000
+ 19783 multiletter control sequences out of 15000+600000
+ 474787 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,62p,1557b,267s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<p:/texlive/2022/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmbx10.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmb
-x12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><p
-:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><p:/texlive/
-2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><p:/texlive/2022/texmf
--dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on Final_Paper.pdf (13 pages, 976934 bytes).
+ 55i,7n,62p,1487b,269s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><p:/texli
+ve/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><p:/texlive/2022/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><p:/texlive/2022/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmr12.pfb><p:/texlive/2022/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmr17.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmti12.pfb>
+Output written on Final_Paper.pdf (13 pages, 987801 bytes).
 PDF statistics:
  87 PDF objects out of 1000 (max. 8388607)
  49 compressed objects within 1 object stream

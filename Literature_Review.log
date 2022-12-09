@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  5 DEC 2022 22:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  9 DEC 2022 11:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -134,87 +134,88 @@ Underfull \hbox (badness 10000) in paragraph at lines 79--82
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 89--90
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 92--93
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
 
  []
 
 [1
 
 {p:/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
+<Figures/example.jpg, id=11, 681.747pt x 227.6505pt>
+File: Figures/example.jpg Graphic file (type jpg)
+<use Figures/example.jpg>
+Package pdftex.def Info: Figures/example.jpg  used on input line 94.
+(pdftex.def)             Requested size: 289.07999pt x 96.53307pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 98--99
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 97--99
+Underfull \hbox (badness 10000) in paragraph at lines 101--102
+
+ []
+
+[2 <./Figures/example.jpg>]
+Underfull \hbox (badness 10000) in paragraph at lines 107--109
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 101--103
+Underfull \hbox (badness 10000) in paragraph at lines 110--112
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 104--106
+Underfull \hbox (badness 10000) in paragraph at lines 114--116
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 108--110
-
- []
-
-[2]
-Overfull \hbox (23.93855pt too wide) in paragraph at lines 112--114
+Overfull \hbox (23.93855pt too wide) in paragraph at lines 118--120
 \OT1/cmr/m/n/10.95 com-pared and an-a-lyzed the dis-tributed mem-ory ar-chi-tec
 -ture and shared mem-ory architecture[[]].
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 112--114
+Underfull \hbox (badness 10000) in paragraph at lines 118--120
 
  []
 
-
-Underfull \hbox (badness 1253) in paragraph at lines 131--132
+[3]
+Underfull \hbox (badness 1253) in paragraph at lines 137--138
 \OT1/cmr/m/n/10.95 ter-na-tional Con-fer-ence on Smart City; IEEE 4th In-ter-na
 -tional Con-fer-ence on
  []
 
 
-Underfull \hbox (badness 1102) in paragraph at lines 131--132
+Underfull \hbox (badness 1102) in paragraph at lines 137--138
 \OT1/cmr/m/n/10.95 Data Sci-ence and Sys-tems (HPCC/SmartCity/DSS), 2018, pp. 1
 219-1222, doi:
  []
 
-[3] [4] (./Literature_Review.aux)
+[4] [5] (./Literature_Review.aux)
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
  ) 
 Here is how much of TeX's memory you used:
- 1395 strings out of 478268
- 22402 string characters out of 5850339
+ 1412 strings out of 478268
+ 22722 string characters out of 5850339
  319839 words of memory out of 5000000
- 19632 multiletter control sequences out of 15000+600000
+ 19645 multiletter control sequences out of 15000+600000
  474171 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,6n,62p,1304b,238s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,6n,62p,1329b,267s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><p:/tex
 live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><p:/texlive/2022/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb><p:/texlive/2022/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr17.pfb><p:/texlive/2022/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmti12.pfb>
-Output written on Literature_Review.pdf (4 pages, 86549 bytes).
+Output written on Literature_Review.pdf (5 pages, 116328 bytes).
 PDF statistics:
- 42 PDF objects out of 1000 (max. 8388607)
- 25 compressed objects within 1 object stream
+ 46 PDF objects out of 1000 (max. 8388607)
+ 27 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 
