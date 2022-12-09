@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  9 DEC 2022 13:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.22)  9 DEC 2022 14:25
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -160,32 +160,37 @@ Package pdftex.def Info: Figures/fig2.jpg  used on input line 170.
 <Figures/fig3.jpg, id=26, 744.98325pt x 455.90324pt>
 File: Figures/fig3.jpg Graphic file (type jpg)
 <use Figures/fig3.jpg>
-Package pdftex.def Info: Figures/fig3.jpg  used on input line 172.
+Package pdftex.def Info: Figures/fig3.jpg  used on input line 171.
 (pdftex.def)             Requested size: 289.07999pt x 176.90414pt.
 <Figures/fig4.jpg, id=27, 754.61925pt x 469.755pt>
 File: Figures/fig4.jpg Graphic file (type jpg)
 <use Figures/fig4.jpg>
-Package pdftex.def Info: Figures/fig4.jpg  used on input line 173.
+Package pdftex.def Info: Figures/fig4.jpg  used on input line 172.
 (pdftex.def)             Requested size: 289.07999pt x 179.95667pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 178--180
+Underfull \hbox (badness 10000) in paragraph at lines 177--179
 
  []
 
 [6 <./Figures/fig2.jpg> <./Figures/fig3.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 186--187
+Underfull \hbox (badness 10000) in paragraph at lines 185--186
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 187--190
 
  []
 
 <Figures/tbible.jpg, id=31, 711.8595pt x 419.76825pt>
 File: Figures/tbible.jpg Graphic file (type jpg)
 <use Figures/tbible.jpg>
-Package pdftex.def Info: Figures/tbible.jpg  used on input line 191.
+Package pdftex.def Info: Figures/tbible.jpg  used on input line 192.
 (pdftex.def)             Requested size: 289.07999pt x 170.46637pt.
 <Figures/ngeno.jpg, id=32, 710.655pt x 446.8695pt>
 File: Figures/ngeno.jpg Graphic file (type jpg)
 <use Figures/ngeno.jpg>
-Package pdftex.def Info: Figures/ngeno.jpg  used on input line 192.
+Package pdftex.def Info: Figures/ngeno.jpg  used on input line 193.
 (pdftex.def)             Requested size: 289.07999pt x 181.77893pt.
 <Figures/fig5.jpg, id=33, 699.8145pt x 422.7795pt>
 File: Figures/fig5.jpg Graphic file (type jpg)
@@ -209,18 +214,18 @@ File: Figures/sworst.jpg Graphic file (type jpg)
 Package pdftex.def Info: Figures/sworst.jpg  used on input line 208.
 (pdftex.def)             Requested size: 289.07999pt x 189.35255pt.
  [8 <./Figures/tbible.jpg>]
-Underfull \hbox (badness 10000) in paragraph at lines 228--230
+Underfull \hbox (badness 10000) in paragraph at lines 226--228
 
  []
 
 [9 <./Figures/ngeno.jpg>]
-Underfull \hbox (badness 1253) in paragraph at lines 240--241
+Underfull \hbox (badness 1253) in paragraph at lines 238--239
 \OT1/cmr/m/n/10.95 ter-na-tional Con-fer-ence on Smart City; IEEE 4th In-ter-na
 -tional Con-fer-ence on
  []
 
 
-Underfull \hbox (badness 1102) in paragraph at lines 240--241
+Underfull \hbox (badness 1102) in paragraph at lines 238--239
 \OT1/cmr/m/n/10.95 Data Sci-ence and Sys-tems (HPCC/SmartCity/DSS), 2018, pp. 1
 219-1222, doi:
  []
@@ -234,7 +239,7 @@ Here is how much of TeX's memory you used:
  19783 multiletter control sequences out of 15000+600000
  474787 words of font info for 48 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,7n,62p,1487b,269s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 55i,6n,62p,1487b,267s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <p:/texlive/2022/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><p:/texlive/2022/texmf-dist/fon
 ts/type1/public/amsfonts/cm/cmbx12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/
@@ -242,7 +247,7 @@ public/amsfonts/cm/cmr10.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/ams
 fonts/cm/cmr12.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/c
 mr17.pfb><p:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
 
-Output written on Final_Paper.pdf (13 pages, 987978 bytes).
+Output written on Final_Paper.pdf (13 pages, 987960 bytes).
 PDF statistics:
  87 PDF objects out of 1000 (max. 8388607)
  49 compressed objects within 1 object stream
