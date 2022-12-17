@@ -139,6 +139,31 @@ int KMPSearch(char* pat, char* txt,int patlen, int txtlen)
     return co;
 }
 
+int KMPSearch(char* pat, char* txt, int patlen, int txtlen, int* lps)
+{
+    int co = 0;
+    int i = 0;
+    int j = 0;
+    while ((txtlen - i) >= (patlen - j)) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == patlen) {
+            cout << i - j;
+            j = lps[j - 1];
+            co++;
+        }
+        else if (i < txtlen && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+    return co;
+}
+
 int RabinKarp2(char* x, char* y,int patlen, int txtlen)
 {
     int da, hx, hy, i, j, count;
@@ -330,10 +355,10 @@ void sliceNaive(char* pat, char* txt, int tread) {
     int M = strlen(pat);
     int N = strlen(txt);
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        Naive(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M ];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        Naive(pat, part, M, (1) * (N / tread) + M);
         delete[] part;
     }
     cilk_sync;
@@ -343,11 +368,12 @@ void sliceKMP(char* pat, char* txt, int tread) {
 
     int M = strlen(pat);
     int N = strlen(txt);
+    int* lps = new int[strlen(pat)];
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        KMPSearch(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M ];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        KMPSearch(pat, part, M, (1) * (N / tread) + M , lps);
         delete[] part;
     }
 
@@ -360,10 +386,10 @@ void sliceRabinKarp2(char* pat, char* txt, int tread) {
     int M = strlen(pat);
     int N = strlen(txt);
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        RabinKarp2(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M ];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        RabinKarp2(pat, part, M, (1) * (N / tread) + M);
         delete[] part;
     }
 
@@ -377,10 +403,10 @@ void sliceBM(char* pat, char* txt, int tread) {
     int M = strlen(pat);
     int N = strlen(txt);
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        bm(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M ];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        bm(pat, part, M, (1) * (N / tread) + M);
         delete[] part;
     }
     cilk_sync;
@@ -394,10 +420,10 @@ void sliceso(char* pat, char* txt, int tread) {
     int M = strlen(pat);
     int N = strlen(txt);
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        so(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M ];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        so(pat, part, M, (1) * (N / tread) + M);
         delete[] part;
     }
     cilk_sync;
@@ -483,7 +509,6 @@ int SSEF(char* x, char* y,int Plen,int Tlen) {
         }
         ptr16 += last;
     }
-    
     return count;
 }
 
@@ -877,10 +902,10 @@ void sliceEPSM(char* pat, char* txt, int tread) {
 
     /* A loop to slide pat[] one by one */
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        EPSM(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        EPSM(pat, part, M, (1) * (N / tread) + M);
         delete[] part;
     }
 
@@ -895,10 +920,10 @@ void sliceSSEF(char* pat, char* txt, int tread) {
 
     /* A loop to slide pat[] one by one */
     cilk_for (int i = 0; i < tread; i++) {
-        char* part = new char[(1) * (N / tread) + M + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M);
-        part[(1) * (N / tread) + M] = '\0';
-        SSEF(pat, part,M,(1) * (N / tread) + M + 1);
+        char* part = new char[(1) * (N / tread) + M];
+        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
+        part[(1) * (N / tread) + M - 1] = '\0';
+        SSEF(pat, part, M, (1) * (N / tread) + M);
         delete[] part;
     }
 

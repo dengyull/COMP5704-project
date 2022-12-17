@@ -1,69 +1,234 @@
 ﻿
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
-
 #include <stdio.h>
 #include <fstream>
 #include <iostream>
-#include <sys/time.h>
+#include <emmintrin.h>
+#include <smmintrin.h>
+#include <random>
 using namespace std;
+#define XSIZE 4200
+#define SIGMA 256
 
-
-
-unsigned long long todval (struct timeval *tp) {
-    return tp->tv_sec * 1000 * 1000 + tp->tv_usec;
-}
-
-
-__global__ void ShiftOrMatch(char* pSrc, int nSrcSize, char* pSubSrc, int nSubSrcSize, int tr)
+__global__ void NaiveSearch(char* pat, char* txt, int* match, int pattern_size, int text_size)
 {
-    int i = threadIdx.x;
-    int end;
-    if (i >= tr - 1)
-        end = nSrcSize - nSubSrcSize;
-    else if (tr==1)
-        end = nSrcSize - nSubSrcSize;
-    else
-        end = (i * (nSrcSize +1 / tr));
-    long skip[256];
-    memset(skip, -1, sizeof(skip));
-    for (int i = 0; i < nSubSrcSize; i++)
-    {
-        skip[pSubSrc[i]] ^= (0x01 << i);
-    }
-
-    long mask = ~(0x01 << (nSubSrcSize - 1));
-    long ds = -1;
-    int nPos = (threadIdx.x * (nSrcSize / tr));
-    while (nPos <= end)
-    {
-        ds = (ds << 0x01) | skip[pSrc[nPos]];
-        if (~(ds | mask))
-        {
-            break;
+    int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    if (pid <= text_size - pattern_size) {
+        //printf("pid %d ", pid);
+        //int loop = 0;
+        int flag = 1;
+        for (int i = 0; i < pattern_size; i++) {
+            if (txt[pid + i] != pat[i]) {
+                flag = 0;
+            }
+            //loop++;
         }
-        nPos++;
+        if (flag) {
+            //printf("Found pattern at index %d ", pid);
+            match[pid] = 1;
+        }
+        //printf("loop %d ", loop);
     }
-    //printf("Found pattern at index %d ", nPos - (nSubSrcSize - 1));
-    //return nPos - (nSubSrcSize - 1);
+}
 
+void dobrute(char* text, char* pattern) {
+
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    cout << (sizes + 1024 - 1) / 1024 << endl;
+    NaiveSearch << <(sizes + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes);
+    
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+
+__global__ void SliceKMP(char* pat, char* txt, int* match, int patlen, int txtlen, int* lps, int range)
+{
+    int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    int i = 0 + pid * range;
+    int j = 0;
+    while (((txtlen - i) >= (patlen - j)) && (i < range + pid * range + patlen -1)){
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == patlen) {
+            match[(i - j)] = 1;
+            j = lps[j - 1];
+        }
+        else if (i < txtlen && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+}
+
+__global__ void KMPSearch(char* pat, char* txt, int* match, int patlen, int txtlen, int* lps)
+{
+    int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    printf("pid %d ", pid);
+    int i = 0;
+    int j = 0;
+
+    while ((txtlen - i) >= (patlen - j)) {
+        if (pat[j] == txt[i]) {
+            j++;
+            i++;
+        }
+        if (j == patlen) {
+            match[(i - j)] = 1;
+            j = lps[j - 1];
+        }
+        else if (i < txtlen && pat[j] != txt[i]) {
+            if (j != 0)
+                j = lps[j - 1];
+            else
+                i = i + 1;
+        }
+    }
+}
+void LPSArray(char* pat, int M, int* lps)
+{
+    int len = 0;
+    lps[0] = 0;
+    int i = 1;
+    while (i < M) {
+        if (pat[i] == pat[len]) {
+            len++;
+            lps[i] = len;
+            i++;
+        }
+        else
+        {
+            if (len != 0) {
+                len = lps[len - 1];
+            }
+            else
+            {
+                lps[i] = 0;
+                i++;
+            }
+        }
+    }
+}
+
+void doKMP(char* text, char* pattern) {
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* dev_lps;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    int* lps = new int[pattern_size];
+    LPSArray(pattern, pattern_size, lps);
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMalloc((void**)&dev_lps, pattern_size * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_lps, lps, pattern_size * sizeof(int), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    KMPSearch << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, dev_lps);
+
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
 }
 
 
-__global__ void bm(char* x, char* y, int m, int n, int tr) {
-    int pid = threadIdx.x + blockIdx.x * blockDim.x;
-    int i, j, bmGs[4200], bmBc[256], count;
-    int end;
-    if (i >= tr - 1)
-        end = n - m;
-    else if (tr==1)
-        end = n - m;
-    else
-        end = (threadIdx.x * (n +1 / tr));
+void dosliceKMP(char* text, char* pattern, int range) {
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* dev_lps;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    int* lps = new int[pattern_size];
+    LPSArray(pattern, pattern_size, lps);
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMalloc((void**)&dev_lps, pattern_size * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_lps, lps, pattern_size * sizeof(int), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    int tid = sizes / range;
+    cout << tid << endl;
+    SliceKMP << <(tid + 1024 - 1) /1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, dev_lps, range);
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
 
-    /* Preprocessing */
-    int suff[4200];
-    int f, g;
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+
+
+void suffixes(char* x, int m, int* suff) {
+    int f, g, i;
     suff[m - 1] = m;
     g = m - 1;
     for (i = m - 2; i >= 0; --i) {
@@ -78,6 +243,10 @@ __global__ void bm(char* x, char* y, int m, int n, int tr) {
             suff[i] = f - g;
         }
     }
+}
+void preBmGs(char* x, int m, int bmGs[]) {
+    int i, j, suff[XSIZE];
+    suffixes(x, m, suff);
     for (i = 0; i < m; ++i) bmGs[i] = m;
     j = 0;
     for (i = m - 1; i >= 0; --i)
@@ -87,70 +256,324 @@ __global__ void bm(char* x, char* y, int m, int n, int tr) {
                     bmGs[j] = m - 1 - i;
     for (i = 0; i <= m - 2; ++i)
         bmGs[m - 1 - suff[i]] = m - 1 - i;
-    for (i = 0; i < 256; ++i)
+}
+
+void preBmBc(char* x, int m, int bmBc[]) {
+    int i;
+    for (i = 0; i < SIGMA; ++i)
         bmBc[i] = m;
     for (i = 0; i < m - 1; ++i)
         bmBc[x[i]] = m - i - 1;
-    
-
-        /* Searching */
-    j = (threadIdx.x * (n / tr));
-    count = 0;
-    while (j <= end) {
-        for (i = m - 1; i >= 0 && x[i] == y[i + j]; --i);
+}
+__global__ void bm(char* x, char* y, int* match, int patlen, int txtlen, int bmGs[], int bmBc[])
+{
+    int i, j;
+    /* Searching */
+    j = 0;
+    while (j <= txtlen - patlen) {
+        for (i = patlen - 1; i >= 0 && x[i] == y[i + j]; --i);
         if (i < 0) {
-            printf("Found pattern at index %d ", pid);
+            match[j] = 1;
             j += bmGs[0];
         }
         else
-            j += max(bmGs[i], bmBc[y[i + j]] - m + 1 + i);
-    }
-    //return count;
-}
-
-
-
-
-
-void slice(char* pat, char* txt, int tread) {
-
-    int M = strlen(pat);
-    int N = strlen(txt);
-    cout << N << endl;
-
-    /* A loop to slide pat[] one by one */
-    for (int i = 0; i < tread; i++) {
-
-        char* part = new char[(1) * (N / tread) + 1];
-        memcpy(part, txt + (i * (N / tread)), (1) * (N / tread));
-        part[(1) * (N / tread)] = '\0';
-        //cout << part << endl;
-        //cout << i * (N / tread) << endl;
-        //cout << (i + 1) * (N / tread) << endl;
-        //ShiftOrMatch(pat, part);
+            j += max(bmGs[i], bmBc[y[i + j]] - patlen + 1 + i);
     }
 }
-
-__global__ void NaiveSearch(char* pat, char* txt, bool match, int pattern_size, int text_size)
+__global__ void slicebm(char* x, char* y, int* match, int patlen, int txtlen, int bmGs[], int bmBc[], int range)
 {
     int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    int i, j;
+    /* Searching */
+    j = 0 + pid * range;
+    while ((j <= txtlen - patlen) && (j < range + pid * range + patlen - 1)) {
+        for (i = patlen - 1; i >= 0 && x[i] == y[i + j]; --i);
+        if (i < 0) {
+            match[j] = 1;
+            j += bmGs[0];
+        }
+        else
+            j += max(bmGs[i], bmBc[y[i + j]] - patlen + 1 + i);
+    }
+}
 
-    if (pid <= text_size - pattern_size) {
+void dobm(char* text, char* pattern) {
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* dev_lps;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    int bmGs[XSIZE], bmBc[SIGMA];
+    int* dev_bmGs;
+    int* dev_bmBc;
+    preBmGs(pattern, pattern_size, bmGs);
+    preBmBc(pattern, pattern_size, bmBc);
+    int* lps = new int[pattern_size];
+    LPSArray(pattern, pattern_size, lps);
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMalloc((void**)&dev_bmGs, XSIZE * sizeof(int));
+    cudaMalloc((void**)&dev_bmBc, SIGMA * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_bmGs, bmGs, XSIZE * sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_bmBc, bmBc, SIGMA * sizeof(int), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    bm << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, dev_bmGs, dev_bmBc);
 
-        int flag = 1;
-        for (int i = 0; i < pattern_size; i++) {
-            if (txt[pid + i] != pat[i]) {
-                flag = 0;
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+void doslicebm(char* text, char* pattern, int range) {
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* dev_lps;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    int bmGs[XSIZE], bmBc[SIGMA];
+    int* dev_bmGs;
+    int* dev_bmBc;
+    preBmGs(pattern, pattern_size, bmGs);
+    preBmBc(pattern, pattern_size, bmBc);
+    int* lps = new int[pattern_size];
+    LPSArray(pattern, pattern_size, lps);
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMalloc((void**)&dev_bmGs, XSIZE * sizeof(int));
+    cudaMalloc((void**)&dev_bmBc, SIGMA * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_bmGs, bmGs, XSIZE * sizeof(int), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_bmBc, bmBc, SIGMA * sizeof(int), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    int tid = sizes / range;
+    cout << tid << endl;
+    
+    slicebm << <(tid + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, dev_bmGs, dev_bmBc, range);
+
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+
+
+int preSo(char* x, int m, unsigned int S[]) {
+    unsigned int j, lim;
+    int i;
+    for (i = 0; i < 256; ++i)
+        S[i] = ~0;
+    for (lim = i = 0, j = 1; i < m; ++i, j <<= 1) {
+        S[x[i]] &= ~j;
+        lim |= j;
+    }
+    lim = ~(lim >> 1);
+    return(lim);
+}
+
+
+__global__ void sol(char* x, char* y, int* match, int patlen, int txtlen, unsigned int lim, unsigned int S[256])
+{
+    unsigned int D, k, h, p_len;
+    int j, count;
+    p_len = patlen;
+    patlen = 32;
+    /* Searching */
+    for (D = ~0, j = 0; j < txtlen; ++j) {
+        D = (D << 1) | S[y[j]];
+        if (D < lim) {
+            k = 0;
+            h = j - patlen + 1;
+            while (k < p_len && x[k] == y[h + k]) k++;
+            if (k == p_len) {
+                match[j - patlen + 1] = 1;
             }
         }
-        if (flag) {
-            printf("Found pattern at index %d ", pid);
-            match = 1;
+    }
+}
+__global__ void slicesol(char* x, char* y, int* match, int patlen, int txtlen, unsigned int lim, unsigned int S[256], int range)
+{
+    int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    unsigned int D, k, h, p_len;
+    int j, count;
+    p_len = patlen;
+    patlen = 32;
+    /* Searching */
+    for (D = ~0, j = 0 + pid * range; (j < txtlen && (j < range + pid * range + patlen - 1)); ++j) {
+        D = (D << 1) | S[y[j]];
+        if (D < lim) {
+            k = 0;
+            h = j - patlen + 1;
+            while (k < p_len && x[k] == y[h + k]) k++;
+            if (k == p_len) {
+                match[j - patlen + 1] = 1;
+            }
         }
     }
 }
 
-__global__ void RabinKarp2(char* x, char* y, int pattern_size, int text_size) {
+__global__ void so(char* x, char* y, int* match, int patlen, int txtlen, unsigned int lim, unsigned int S[256])
+{
+    unsigned int D;
+    int j;
+    for (D = ~0, j = 0; j < txtlen; ++j) {
+        D = (D << 1) | S[y[j]];
+        if (D < lim) {
+            match[j - patlen + 1] = 1;
+        }
+    }
+}
+__global__ void sliceso(char* x, char* y, int* match, int patlen, int txtlen, unsigned int lim, unsigned int S[256],int range)
+{
+    int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    unsigned int D;
+    int j;
+    for (D = ~0, j = 0 + pid * range; (j < txtlen && (j < range + pid * range + patlen - 1)); ++j) {
+        D = (D << 1) | S[y[j]];
+        if (D < lim) {
+            match[j - patlen + 1] = 1;
+        }
+    }
+}
+void doso(char* text, char* pattern) {
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    unsigned int lim;
+    unsigned int S[256];
+    unsigned int* dev_S;
+    lim = preSo(pattern, pattern_size, S);
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMalloc((void**)&dev_S, 256 * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_S, S, 256 * sizeof(int), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    if (pattern_size > 32) {
+        sol << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, lim, dev_S);
+
+    }
+    else {
+        so << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, lim, dev_S);
+
+    }
+
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+void dosliceso(char* text, char* pattern, int range) {
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    unsigned int lim;
+    unsigned int S[256];
+    unsigned int* dev_S;
+    lim = preSo(pattern, pattern_size, S);
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMalloc((void**)&dev_S, 256 * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_S, S, 256 * sizeof(int), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    int tid = sizes / range;
+    cout << tid << endl;
+    if (pattern_size > 32) {
+        slicesol << <(tid + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, lim, dev_S, range);
+
+    }
+    else {
+        sliceso << <(tid + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, lim, dev_S, range);
+
+    }
+
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+
+
+__global__ void RabinKarp2(char* x, char* y, int* match, int pattern_size, int text_size) {
     int da, hx, hy, i, j, count;
     int pid = threadIdx.x + blockIdx.x * blockDim.x;
     count = 0;
@@ -164,16 +587,51 @@ __global__ void RabinKarp2(char* x, char* y, int pattern_size, int text_size) {
 
     j = 0;
     while (j <= text_size - pattern_size) {
-        if (hx == hy ) {
+        if (hx == hy) {
             int flag = 1;
             for (int i = 0; i < pattern_size; i++) {
-                if (y[pid + i] != x[i]) {
+                if (y[pid + j + i] != x[i]) {
                     flag = 0;
                 }
             }
             if (flag) {
-                printf("Found pattern at index %d ", pid);
-                count++;
+                match[pid + j] = 1;
+                //printf("Found pattern at index %d ", pid + j);
+            }
+        }
+        hy = ((((hy)-(y[pid + j]) * da) << 1) + (y[pid + j + pattern_size]));
+        ++j;
+    }
+}
+
+
+__global__ void RabinKarp(char* x, char* y, int* match, int pattern_size, int text_size, int range) {
+    int da, hx, hy, i, j, count;
+    int pid = threadIdx.x + blockIdx.x * blockDim.x;
+    count = 0;
+    for (da = i = 1; i < pattern_size; ++i)
+        da = (da << 1);
+    for (hy = hx = i = 0; i < pattern_size; ++i) {
+        hx = ((hx << 1) + x[i]);
+        hy = ((hy << 1) + y[pid * range + i]);
+    }
+    j = 0 + pid * range;
+    while ((j <= text_size - pattern_size) && (j < range + pid * range + pattern_size - 1)) {
+
+        //printf("pid * range %d ", pid * range);
+        if (hx == hy) {
+            int flag = 1;
+            //printf("pattern_size %d ", pattern_size);
+            for (int i = 0; i < pattern_size; i++) {
+                if (y[j + i] != x[i]) {
+                    flag = 0;
+                    //printf("error at index %d ", pid * range);
+                    //printf("error at index %d ", pid * range + j + i);
+                }
+            }
+            if (flag) {
+                //printf("Found pattern at index %d ", pid * range);
+                match[j] = 1;
             }
         }
         hy = ((((hy)-(y[j]) * da) << 1) + (y[j + pattern_size]));
@@ -181,15 +639,89 @@ __global__ void RabinKarp2(char* x, char* y, int pattern_size, int text_size) {
     }
 }
 
-int main()
-{
 
-    time_t start, end;
-    time(&start);
-    string line;
+void doRabinKarp(char* text, char* pattern) {
+
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    cout << (sizes + 1024 - 1) / 1024 << endl;
+    RabinKarp2 << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes);
+
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+
+void dosliceRabinKarp(char* text, char* pattern, int range) {
+
+    int pattern_size = strlen(pattern);
+    int sizes = strlen(text);
+    char* dev_text;
+    char* dev_pattern;
+    int* dev_match;
+    int* matches = new int[sizes];
+    for (int i = 0; i < sizes; i++) {
+        //matches[i] = 0;
+    }
+    cudaMalloc((void**)&dev_text, sizes * sizeof(char));
+    cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
+    cudaMalloc((void**)&dev_match, sizes * sizeof(int));
+    cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
+    cout << pattern_size << endl;
+    cout << sizes << endl;
+    int tid = sizes / range;
+    cout << tid << endl;
+    RabinKarp << <(tid + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, range);
+
+    cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
+
+    int count = 0;
+    //cout << "count : " << count << endl;
+    for (int i = 0; i < sizes; i++) {
+        //cout << matches[i] << endl;
+        if (matches[i] == 1) {
+            count++;
+        }
+    }
+
+    cout << "count : " << count << endl;
+    cudaFree(dev_text);
+    cudaFree(dev_pattern);
+    cudaFree(dev_match);
+}
+
+
+int main() {
     streampos size;
     char* memblock;
-    ifstream myfile("gen10.txt", ios::in | ios::binary | ios::ate);
+    ifstream myfile("bible.txt", ios::in | ios::binary | ios::ate);
     if (myfile.is_open())
     {
         size = myfile.tellg();
@@ -197,80 +729,22 @@ int main()
         myfile.seekg(0, ios::beg);
         myfile.read(memblock, size);
         myfile.close();
-
         cout << "the entire file content is in memory";
-        //cout << memblock;
-        char* text = memblock;
-        char* pattern = "Then were the king's scribes called at that time in the third month, that is, the month Sivan, on the three and twentieth day thereof; and it was written according to all that Mordecai commanded unto the Jews, and to the lieutenants, and the deputies and rulers of the provinces which are from India unto Ethiopia, an hundred twenty and seven provinces, unto every province according to the writing thereof, and unto every people after their language, and to the Jews according to their writing, and according to their language.";
-        struct timeval t1, t2;
-        gettimeofday(&t1,0);
-        int pattern_size = strlen(pattern);
-        int sizes = strlen(text);
-        char* dev_text;
-        char* dev_pattern;
-        int* dev_match;
-        int* dev_output;
-        int* dev_witness;
-        int* dev_blockoutput;
-        cudaMalloc((void**)&dev_text, sizes * sizeof(char));
-        cudaMalloc((void**)&dev_pattern, pattern_size * sizeof(char));
-        cudaMalloc((void**)&dev_match, sizes * sizeof(int));
-        //cudaMalloc((void **)&dev_output, sizeof(int)*size);
-        ofstream outfile;
-        outfile.open("cudaout.txt");
-        
-        cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
-
-        cudaMemcpy(dev_text, text, size * sizeof(char), cudaMemcpyHostToDevice);
-
-        bool matches = false;
-
-        NaiveSearch << <(sizes + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, matches, pattern_size, size);
-
-        gettimeofday(&t2,0);
-        unsigned long long runtime_ms = (todval(&t2)-todval(&t1))/1000;
-        printf("Navie: \n%f\n", runtime_ms/1000.0);
-        outfile << endl << "Naive: " << runtime_ms/1000.0 << endl ;
-        if (matches)
-            printf("Found pattern ");
-        else
-            printf("nothing");
-        //cudaFree(matching);
-
-        gettimeofday(&t1,0);
-        int M = strlen(pattern);
-        int N = strlen(text);
-        int ne[1024],me[1024];
-        for (int i = 0; i < 1023; i++)
-        {
-            ne[i] = (i * (N / 1024)); 
-            me[i] = (1 * (N / 1024)) + M;
-        }
-        ne[1023] = (1023 * (N / 1024));
-        me[1023] = N - (1023 * (N / 1024));
-        int* nes[1024];
-        int* mes[1024];
-        cudaMalloc((void**)&mes, 1024 * sizeof(int));
-        cudaMalloc((void**)&nes, 1024 * sizeof(int));
-        cudaMalloc((void**)&nes[0], 1024 * sizeof(int));
-        cudaMemcpy(nes[0], ne, 1024 * sizeof(int), cudaMemcpyHostToDevice);
-        cudaMemcpy(nes[0], ne, 1024 * sizeof(int), cudaMemcpyHostToDevice);
-        cudaMemcpy(mes[0], me, 1024 * sizeof(int), cudaMemcpyHostToDevice);
-        ShiftOrMatch << <1, 512 >> > (dev_text, size, dev_pattern, pattern_size,512);
-
-        outfile << endl << "ShiftOrMatch: " << runtime_ms/1000.0 << endl ;
-        gettimeofday(&t2,0);
-        runtime_ms = (todval(&t2)-todval(&t1))/1000;
-        printf("\n%f\n", runtime_ms/1000.0);
-        gettimeofday(&t1,0);
-        bm << <1, 1 >> > (dev_text, dev_pattern, size, pattern_size,512);
-
-        outfile << endl << "bm: " << runtime_ms/1000.0 << endl ;
-        gettimeofday(&t2,0);
-        runtime_ms = (todval(&t2)-todval(&t1))/1000;
-        printf("\n%f\n", runtime_ms/1000.0);
-        delete[] memblock;
     }
-    else cout << "Unable to open file";
-    return 0;
+    cout << "brute:" << endl;
+    dobrute(memblock, "God");
+    cout << "dosliceso:" << endl;
+    dosliceso(memblock, "God", 1);
+    dosliceso(memblock, "God", 2);
+    dosliceso(memblock, "God", 3);
+    dosliceso(memblock, "God", 4);
+    dosliceso(memblock, "God", 5);
+    dosliceso(memblock, "God", 50);
+    //doKMP(memblock, "God");
+    //dobm(memblock, "God");
+    //doso(memblock, "God");
+    //doRabinKarp(memblock, "God");
+    char* pat = (char*)"baa";
+    char* txt = (char*)"aabaabaabab";
+    //doRabinKarp(txt, pat);
 }
