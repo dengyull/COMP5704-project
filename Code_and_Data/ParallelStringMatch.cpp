@@ -1065,13 +1065,12 @@ void does(int n, char* text, int patsize, char* outf)
     sliceSSEF(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << "sliceSSEF: " << runtime_ms/1000.0 << endl ;
-
-        
+    outfile << endl << "sliceSSEF: " << runtime_ms/1000.0 << endl;
     delete[] memblock;
 }
 
 int main(){
+	char* str = (char*)"gen50.txt";
     does(2,(char*)"gen50.txt",2, (char*)"ogen50p2t2.txt");
     does(4,(char*)"gen50.txt",2, (char*)"ogen50p2t4.txt");
     does(8,(char*)"gen50.txt",2, (char*)"ogen50p2t8.txt");

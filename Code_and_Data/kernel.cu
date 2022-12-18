@@ -10,7 +10,11 @@
 using namespace std;
 #define XSIZE 4200
 #define SIGMA 256
+#include <sys/time.h>
 
+unsigned long long todval (struct timeval *tp) {
+    return tp->tv_sec * 1000 * 1000 + tp->tv_usec;
+}
 __global__ void NaiveSearch(char* pat, char* txt, int* match, int pattern_size, int text_size)
 {
     int pid = threadIdx.x + blockIdx.x * blockDim.x;
@@ -734,12 +738,18 @@ int main() {
     cout << "brute:" << endl;
     dobrute(memblock, "God");
     cout << "dosliceso:" << endl;
-    dosliceso(memblock, "God", 1);
-    dosliceso(memblock, "God", 2);
-    dosliceso(memblock, "God", 3);
-    dosliceso(memblock, "God", 4);
-    dosliceso(memblock, "God", 5);
-    dosliceso(memblock, "God", 50);
+	
+    struct timeval t1, t2;
+    gettimeofday(&t1,0);
+    doKMP(memblock, "God");
+    gettimeofday(&t2,0);
+    unsigned long long runtime_ms = (todval(&t2)-todval(&t1))/1000;
+    dosliceRabinKarp(memblock, "God", 1);
+    dosliceRabinKarp(memblock, "God", 2);
+    dosliceRabinKarp(memblock, "God", 3);
+    dosliceRabinKarp(memblock, "God", 4);
+    dosliceRabinKarp(memblock, "God", 5);
+    dosliceRabinKarp(memblock, "God", 50);
     //doKMP(memblock, "God");
     //dobm(memblock, "God");
     //doso(memblock, "God");
