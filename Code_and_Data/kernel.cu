@@ -36,7 +36,7 @@ __global__ void NaiveSearch(char* pat, char* txt, int* match, int pattern_size, 
     }
 }
 
-void dobrute(char* text, char* pattern) {
+int dobrute(char* text, char* pattern) {
 
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
@@ -52,11 +52,11 @@ void dobrute(char* text, char* pattern) {
     cudaMalloc((void**)&dev_match, sizes * sizeof(int));
     cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
-    cout << pattern_size << endl;
-    cout << sizes << endl;
-    cout << (sizes + 1024 - 1) / 1024 << endl;
+    //cout << pattern_size << endl;
+    //cout << sizes << endl;
+    //cout << (sizes + 1024 - 1) / 1024 << endl;
     NaiveSearch << <(sizes + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes);
-    
+    cudaDeviceSynchronize();
     cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
 
     int count = 0;
@@ -72,6 +72,7 @@ void dobrute(char* text, char* pattern) {
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    return count;
 }
 
 __global__ void SliceKMP(char* pat, char* txt, int* match, int patlen, int txtlen, int* lps, int range)
@@ -188,7 +189,7 @@ void doKMP(char* text, char* pattern) {
 }
 
 
-void dosliceKMP(char* text, char* pattern, int range) {
+int dosliceKMP(char* text, char* pattern, int range) {
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
     char* dev_text;
@@ -208,10 +209,10 @@ void dosliceKMP(char* text, char* pattern, int range) {
     cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_lps, lps, pattern_size * sizeof(int), cudaMemcpyHostToDevice);
-    cout << pattern_size << endl;
-    cout << sizes << endl;
+    //cout << pattern_size << endl;
+    //cout << sizes << endl;
     int tid = sizes / range;
-    cout << tid << endl;
+    //cout << tid << endl;
     SliceKMP << <(tid + 1024 - 1) /1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, dev_lps, range);
     cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
 
@@ -224,10 +225,12 @@ void dosliceKMP(char* text, char* pattern, int range) {
         }
     }
 
-    cout << "count : " << count << endl;
+    //cout << "count : " << count << endl;
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    cudaFree(dev_lps);
+    return count;
 }
 
 
@@ -348,7 +351,7 @@ void dobm(char* text, char* pattern) {
     cudaFree(dev_pattern);
     cudaFree(dev_match);
 }
-void doslicebm(char* text, char* pattern, int range) {
+int doslicebm(char* text, char* pattern, int range) {
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
     char* dev_text;
@@ -375,10 +378,10 @@ void doslicebm(char* text, char* pattern, int range) {
     cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_bmGs, bmGs, XSIZE * sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_bmBc, bmBc, SIGMA * sizeof(int), cudaMemcpyHostToDevice);
-    cout << pattern_size << endl;
-    cout << sizes << endl;
+    //cout << pattern_size << endl;
+    //cout << sizes << endl;
     int tid = sizes / range;
-    cout << tid << endl;
+    //cout << tid << endl;
     
     slicebm << <(tid + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, dev_bmGs, dev_bmBc, range);
 
@@ -393,10 +396,11 @@ void doslicebm(char* text, char* pattern, int range) {
         }
     }
 
-    cout << "count : " << count << endl;
+    //cout << "count : " << count << endl;
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    return count;
 }
 
 
@@ -477,7 +481,7 @@ __global__ void sliceso(char* x, char* y, int* match, int patlen, int txtlen, un
         }
     }
 }
-void doso(char* text, char* pattern) {
+int doso(char* text, char* pattern) {
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
     char* dev_text;
@@ -498,8 +502,8 @@ void doso(char* text, char* pattern) {
     cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_S, S, 256 * sizeof(int), cudaMemcpyHostToDevice);
-    cout << pattern_size << endl;
-    cout << sizes << endl;
+    //cout << pattern_size << endl;
+    //cout << sizes << endl;
     if (pattern_size > 32) {
         sol << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, lim, dev_S);
 
@@ -520,12 +524,13 @@ void doso(char* text, char* pattern) {
         }
     }
 
-    cout << "count : " << count << endl;
+    //cout << "count : " << count << endl;
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    return count;
 }
-void dosliceso(char* text, char* pattern, int range) {
+int dosliceso(char* text, char* pattern, int range) {
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
     char* dev_text;
@@ -546,10 +551,10 @@ void dosliceso(char* text, char* pattern, int range) {
     cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_S, S, 256 * sizeof(int), cudaMemcpyHostToDevice);
-    cout << pattern_size << endl;
-    cout << sizes << endl;
+    //cout << pattern_size << endl;
+    //cout << sizes << endl;
     int tid = sizes / range;
-    cout << tid << endl;
+    //cout << tid << endl;
     if (pattern_size > 32) {
         slicesol << <(tid + 1024 - 1) / 1024, 1024 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes, lim, dev_S, range);
 
@@ -570,10 +575,12 @@ void dosliceso(char* text, char* pattern, int range) {
         }
     }
 
-    cout << "count : " << count << endl;
+    //cout << "count : " << count << endl;
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    cudaFree(dev_S);
+    return count;
 }
 
 
@@ -644,7 +651,7 @@ __global__ void RabinKarp(char* x, char* y, int* match, int pattern_size, int te
 }
 
 
-void doRabinKarp(char* text, char* pattern) {
+int doRabinKarp(char* text, char* pattern) {
 
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
@@ -660,9 +667,9 @@ void doRabinKarp(char* text, char* pattern) {
     cudaMalloc((void**)&dev_match, sizes * sizeof(int));
     cudaMemcpy(dev_pattern, pattern, pattern_size * sizeof(char), cudaMemcpyHostToDevice);
     cudaMemcpy(dev_text, text, sizes * sizeof(char), cudaMemcpyHostToDevice);
-    cout << pattern_size << endl;
-    cout << sizes << endl;
-    cout << (sizes + 1024 - 1) / 1024 << endl;
+    //cout << pattern_size << endl;
+    //cout << sizes << endl;
+    //cout << (sizes + 1024 - 1) / 1024 << endl;
     RabinKarp2 << <1, 1 >> > (dev_pattern, dev_text, dev_match, pattern_size, sizes);
 
     cudaMemcpy(matches, dev_match, sizes * sizeof(int), cudaMemcpyDeviceToHost);
@@ -676,13 +683,14 @@ void doRabinKarp(char* text, char* pattern) {
         }
     }
 
-    cout << "count : " << count << endl;
+    //cout << "count : " << count << endl;
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    return count;
 }
 
-void dosliceRabinKarp(char* text, char* pattern, int range) {
+int dosliceRabinKarp(char* text, char* pattern, int range) {
 
     int pattern_size = strlen(pattern);
     int sizes = strlen(text);
@@ -719,42 +727,118 @@ void dosliceRabinKarp(char* text, char* pattern, int range) {
     cudaFree(dev_text);
     cudaFree(dev_pattern);
     cudaFree(dev_match);
+    return count;
 }
 
 
-int main() {
+
+
+void Loop(char* pat, char* txt,int patlen, int txtlen)
+{
+    int count;
+
+    /* A loop to slide pat[] one by one */
+    for (int i = 0; i <= txtlen - patlen; i++) {
+        if (txt[i] == pat[0]){
+            count++;
+        }
+    }
+    cout << "Loop " << count << endl;
+}
+
+
+void does(int ns, char* text, int patsize, char* outf)
+{
+
+    //int n = 1;
+    //if (argc > 1)
+    //    n = atol(argv[1]);
+    std::cout << "Hello World!\n";
+    string line;
     streampos size;
     char* memblock;
-    ifstream myfile("bible.txt", ios::in | ios::binary | ios::ate);
-    if (myfile.is_open())
-    {
+    ifstream myfile(text, ios::in | ios::binary | ios::ate);
+    if (myfile.is_open()){
+
         size = myfile.tellg();
         memblock = new char[size];
         myfile.seekg(0, ios::beg);
         myfile.read(memblock, size);
         myfile.close();
-        cout << "the entire file content is in memory";
+        cout << "the entire file content is in memory"<< endl;
     }
-    cout << "brute:" << endl;
-    dobrute(memblock, "God");
-    cout << "dosliceso:" << endl;
-	
+    //ifstream myfile3(argv[3], ios::in | ios::binary | ios::ate);
+
+    char* pat = new char[patsize+1];
+    memcpy(pat, memblock + 1000, patsize);
+    pat[patsize] = '\0';
+    /*if (myfile3.is_open()){
+
+        size = myfile3.tellg();
+        pat = new char[size];
+        myfile3.seekg(0, ios::beg);
+        myfile3.read(pat, size);
+        myfile3.close();
+        cout << pat << endl;
+    }*/
+    cout << "pat gen"<< endl;
+    ofstream outfile;
+    outfile.open(outf);
+    outfile << pat << endl;
+
     struct timeval t1, t2;
+
+    int counts = 0;
+    int patlen = strlen(pat);
+    int txtlen = strlen(memblock);
     gettimeofday(&t1,0);
-    doKMP(memblock, "God");
+    Loop(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     unsigned long long runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    dosliceRabinKarp(memblock, "God", 1);
-    dosliceRabinKarp(memblock, "God", 2);
-    dosliceRabinKarp(memblock, "God", 3);
-    dosliceRabinKarp(memblock, "God", 4);
-    dosliceRabinKarp(memblock, "God", 5);
-    dosliceRabinKarp(memblock, "God", 50);
-    //doKMP(memblock, "God");
-    //dobm(memblock, "God");
-    //doso(memblock, "God");
-    //doRabinKarp(memblock, "God");
-    char* pat = (char*)"baa";
-    char* txt = (char*)"aabaabaabab";
-    //doRabinKarp(txt, pat);
+    cout << "Loop " << endl;
+    printf("%f\n", runtime_ms/1000.0);
+
+
+    gettimeofday(&t1,0);
+    counts = dobrute(memblock, pat);
+    gettimeofday(&t2,0);
+    runtime_ms = (todval(&t2)-todval(&t1))/1000;
+    outfile << endl << "Naive: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    gettimeofday(&t1,0);
+    counts = doslicebm(memblock, pat,ns);
+    gettimeofday(&t2,0);
+    runtime_ms = (todval(&t2)-todval(&t1))/1000;
+    outfile << endl << "bm: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+
+
+    gettimeofday(&t1,0);
+    counts = dosliceKMP(memblock, pat,ns);
+    gettimeofday(&t2,0);
+    runtime_ms = (todval(&t2)-todval(&t1))/1000;
+    outfile << endl << "KMPSearch: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+
+
+    gettimeofday(&t1,0);
+    counts = dosliceso(memblock, pat,ns);
+    gettimeofday(&t2,0);
+    runtime_ms = (todval(&t2)-todval(&t1))/1000;
+    outfile << endl << "Shift Or: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+
+
+    gettimeofday(&t1,0);
+    counts = dosliceRabinKarp(memblock, pat,ns);
+    gettimeofday(&t2,0);
+    runtime_ms = (todval(&t2)-todval(&t1))/1000;
+    outfile << endl << "RabinKarp: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+
+
+    delete[] memblock;
+    delete[] pat;
+}
+
+int main() {
+
+    does(1000,(char*)"text2.txt",4, (char*)"otext2.txt");
+
+
 }
