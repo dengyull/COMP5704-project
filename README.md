@@ -8,7 +8,7 @@ The goal of this project was to investigate the parallel implementation of tradi
 
 ## Usage
 ### CPU Version:
-Install Cilk, follow instruction from<a href="https://www.opencilk.org/doc/users-guide/install/">opencilk.org.</a>
+Install Cilk, follow instruction from <a href="https://www.opencilk.org/doc/users-guide/install/">opencilk.org.</a>
 Compile with SSE 4.2. for example:
 
 ```sh
@@ -23,6 +23,11 @@ Compile with nvcc:
 nvcc ParallelStringMatch.cu
 ```
 
+
+## Related
+
+- [SMART](https://github.com/smart-tool/smart) - String Matching Algorithm Research Tool
+- [opencilk](https://www.opencilk.org/) - opencilk
 
 ## License
 
