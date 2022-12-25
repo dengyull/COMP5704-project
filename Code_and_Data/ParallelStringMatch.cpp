@@ -258,7 +258,7 @@ int sol(char* x, char* y,int patlen, int txtlen)
             while (k < p_len && x[k] == y[h + k]) k++;
             if (k == p_len) {
                 count++;
-                cout <<  j - patlen + 1 ;
+                //cout <<  j - patlen + 1 ;
             }
         }
     }
@@ -515,7 +515,7 @@ int SSEF(char* x, char* y,int Plen,int Tlen) {
             while (t) {
                 if (memcmp(x, &T.data[i + t->pos], Plen) == 0) {
                     count++;
-                    cout <<last;
+                    //cout <<last;
 
                 }
                 t = t->next;
@@ -937,6 +937,7 @@ int sliceSSEF(char* pat, char* txt, int tread) {
 
     /* A loop to slide pat[] one by one */
     cilk_for (int i = 0; i < tread; i++) {
+        //cout << i << endl;
         char* part = new char[(1) * (N / tread) + M];
         memcpy(part, txt + (i * (N / tread)), (1) * (N / tread) + M - 1);
         part[(1) * (N / tread) + M - 1] = '\0';
@@ -947,6 +948,8 @@ int sliceSSEF(char* pat, char* txt, int tread) {
     cilk_sync;
     return count;
 }
+
+
 
 void does(int n, char* text, int patsize, char* outf)
 {
@@ -988,8 +991,7 @@ void does(int n, char* text, int patsize, char* outf)
     outfile << pat << endl;
 
     struct timeval t1, t2;
-
-    int counts = 0;
+    int count = 0;
     int patlen = strlen(pat);
     int txtlen = strlen(memblock);
     gettimeofday(&t1,0);
@@ -1001,274 +1003,113 @@ void does(int n, char* text, int patsize, char* outf)
 
 
     gettimeofday(&t1,0);
-    counts = Naive(pat, memblock,patlen,txtlen);
+    count=Naive(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "Naive: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "Naive: " << runtime_ms/1000.0 << endl ;
+    cout << "Naive: " << runtime_ms/1000.0 << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceNaive(pat, memblock,n);
+    count=sliceNaive(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "Slice Naive: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "Slice Naive: " << runtime_ms/1000.0 << endl ;
+    cout << "Slice Naive: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = PNaive(pat, memblock,patlen,txtlen);
+    PNaive(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "Parallel Naive: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "Parallel Naive: " << runtime_ms/1000.0 << endl ;
+    cout << "Parallel Naive: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = bm(pat, memblock,patlen,txtlen);
+    count=bm(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "bm: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "bm: " << runtime_ms/1000.0 << endl ;
+    cout << "bm: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceBM(pat, memblock,n);
+    count=sliceBM(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "Slice BM: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "Slice BM: " << runtime_ms/1000.0 << endl ;
+    cout << "Slice BM: " << runtime_ms/1000.0  << count << endl ;
 
 
     gettimeofday(&t1,0);
-    counts = KMPSearch(pat, memblock,patlen,txtlen);
+    count=KMPSearch(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "KMPSearch: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "KMPSearch: " << runtime_ms/1000.0 << endl ;
+    cout << "KMPSearch: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceKMP(pat, memblock,n);
+    count=sliceKMP(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "sliceKMP: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "sliceKMP: " << runtime_ms/1000.0 << endl ;
+    cout << "sliceKMP: " << runtime_ms/1000.0  << count << endl ;
 
 
     gettimeofday(&t1,0);
-    counts = so(pat, memblock,patlen,txtlen);
+    count=so(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "Shift Or: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "Shift Or: " << runtime_ms/1000.0 << endl ;
+    cout << "Shift Or: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceso(pat, memblock,n);
+    count=sliceso(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "slice Shift Or: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "slice Shift Or: " << runtime_ms/1000.0 << endl ;
+    cout << "slice Shift Or: " << runtime_ms/1000.0  << count << endl ;
 
 
     gettimeofday(&t1,0);
-    counts = RabinKarp2(pat, memblock,patlen,txtlen);
+    count=RabinKarp2(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "RabinKarp: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "RabinKarp: " << runtime_ms/1000.0 << endl ;
+    cout << "RabinKarp: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceRabinKarp2(pat, memblock,n);
+    count=sliceRabinKarp2(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "sliceRabinKarp2: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "sliceRabinKarp2: " << runtime_ms/1000.0 << endl ;
+    cout << "sliceRabinKarp2: " << runtime_ms/1000.0  << count << endl ;
 
 
     gettimeofday(&t1,0);
-    counts = EPSM(pat, memblock,patlen,txtlen);
+    count=EPSM(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "EPSM: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "EPSM: " << runtime_ms/1000.0 << endl ;
+    cout << "EPSM: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceEPSM(pat, memblock,16);
+    count=sliceEPSM(pat, memblock,16);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "sliceEPSM: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "sliceEPSM: " << runtime_ms/1000.0 << endl ;
+    cout << "sliceEPSM: " << runtime_ms/1000.0  << count << endl ;
 
 
     gettimeofday(&t1,0);
-    counts = SSEF(pat, memblock,patlen,txtlen);
+    count=SSEF(pat, memblock,patlen,txtlen);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "SSEF: " << runtime_ms/1000.0 << " count: " << counts << endl ;
+    outfile << "SSEF: " << runtime_ms/1000.0 << endl ;
+    cout << "SSEF: " << runtime_ms/1000.0  << count << endl ;
     gettimeofday(&t1,0);
-    counts = sliceSSEF(pat, memblock,n);
+    count=sliceSSEF(pat, memblock,n);
     gettimeofday(&t2,0);
     runtime_ms = (todval(&t2)-todval(&t1))/1000;
-    outfile << endl << runtime_ms/1000.0;
-    //outfile << endl << "sliceSSEF: " << runtime_ms/1000.0 << " count: " << counts << endl;
+    outfile << "sliceSSEF: " << runtime_ms/1000.0 << endl;
+    cout << "sliceSSEF: " << runtime_ms/1000.0  << count << endl ;
     delete[] memblock;
-    delete[] pat;
 }
 
 int main(){
-	//char* str = (char*)"gen1.txt";
-
-        
-        
-    does(2,(char*)"bible.txt",2, (char*)"obiblep2t2.txt");
-    does(4,(char*)"bible.txt",2, (char*)"obiblep2t4.txt");
-    does(8,(char*)"bible.txt",2, (char*)"obiblep2t8.txt");
-    does(16,(char*)"bible.txt",2, (char*)"obiblep2t16.txt");
-    does(32,(char*)"bible.txt",2, (char*)"obiblep2t32.txt");
-    does(2,(char*)"bible.txt",4, (char*)"obiblep4t2.txt");
-    does(4,(char*)"bible.txt",4, (char*)"obiblep4t4.txt");
-    does(8,(char*)"bible.txt",4, (char*)"obiblep4t8.txt");
-    does(16,(char*)"bible.txt",4, (char*)"obiblep4t16.txt");
-    does(32,(char*)"bible.txt",4, (char*)"obiblep4t32.txt");
-    does(2,(char*)"bible.txt",8, (char*)"obiblep8t2.txt");
-    does(4,(char*)"bible.txt",8, (char*)"obiblep8t4.txt");
-    does(8,(char*)"bible.txt",8, (char*)"obiblep8t8.txt");
-    does(16,(char*)"bible.txt",8, (char*)"obiblep8t16.txt");
-    does(32,(char*)"bible.txt",8, (char*)"obiblep8t32.txt");
-    does(2,(char*)"bible.txt",16, (char*)"obiblep16t2.txt");
-    does(4,(char*)"bible.txt",16, (char*)"obiblep16t4.txt");
-    does(8,(char*)"bible.txt",16, (char*)"obiblep16t8.txt");
-    does(16,(char*)"bible.txt",16, (char*)"obiblep16t16.txt");
-    does(32,(char*)"bible.txt",16, (char*)"obiblep16t32.txt");
-    does(2,(char*)"bible.txt",32, (char*)"obiblep32t2.txt");
-    does(4,(char*)"bible.txt",32, (char*)"obiblep32t4.txt");
-    does(8,(char*)"bible.txt",32, (char*)"obiblep32t8.txt");
-    does(16,(char*)"bible.txt",32, (char*)"obiblep32t16.txt");
-    does(32,(char*)"bible.txt",32, (char*)"obiblep32t32.txt");
-    does(2,(char*)"bible.txt",64, (char*)"obiblep64t2.txt");
-    does(4,(char*)"bible.txt",64, (char*)"obiblep64t4.txt");
-    does(8,(char*)"bible.txt",64, (char*)"obiblep64t8.txt");
-    does(16,(char*)"bible.txt",64, (char*)"obiblep64t16.txt");
-    does(32,(char*)"bible.txt",64, (char*)"obiblep64t32.txt");
-
+	
     
-    does(2,(char*)"bible2.txt",2, (char*)"obible2p2t2.txt");
-    does(4,(char*)"bible2.txt",2, (char*)"obible2p2t4.txt");
-    does(8,(char*)"bible2.txt",2, (char*)"obible2p2t8.txt");
-    does(16,(char*)"bible2.txt",2, (char*)"obible2p2t16.txt");
-    does(32,(char*)"bible2.txt",2, (char*)"obible2p2t32.txt");
-    does(2,(char*)"bible2.txt",4, (char*)"obible2p4t2.txt");
-    does(4,(char*)"bible2.txt",4, (char*)"obible2p4t4.txt");
-    does(8,(char*)"bible2.txt",4, (char*)"obible2p4t8.txt");
-    does(16,(char*)"bible2.txt",4, (char*)"obible2p4t16.txt");
-    does(32,(char*)"bible2.txt",4, (char*)"obible2p4t32.txt");
-    does(2,(char*)"bible2.txt",8, (char*)"obible2p8t2.txt");
-    does(4,(char*)"bible2.txt",8, (char*)"obible2p8t4.txt");
-    does(8,(char*)"bible2.txt",8, (char*)"obible2p8t8.txt");
-    does(16,(char*)"bible2.txt",8, (char*)"obible2p8t16.txt");
-    does(32,(char*)"bible2.txt",8, (char*)"obible2p8t32.txt");
-    does(2,(char*)"bible2.txt",16, (char*)"obible2p16t2.txt");
-    does(4,(char*)"bible2.txt",16, (char*)"obible2p16t4.txt");
-    does(8,(char*)"bible2.txt",16, (char*)"obible2p16t8.txt");
-    does(16,(char*)"bible2.txt",16, (char*)"obible2p16t16.txt");
-    does(32,(char*)"bible2.txt",16, (char*)"obible2p16t32.txt");
-    does(2,(char*)"bible2.txt",32, (char*)"obible2p32t2.txt");
-    does(4,(char*)"bible2.txt",32, (char*)"obible2p32t4.txt");
-    does(8,(char*)"bible2.txt",32, (char*)"obible2p32t8.txt");
-    does(16,(char*)"bible2.txt",32, (char*)"obible2p32t16.txt");
-    does(32,(char*)"bible2.txt",32, (char*)"obible2p32t32.txt");
-    does(2,(char*)"bible2.txt",64, (char*)"obible2p64t2.txt");
-    does(4,(char*)"bible2.txt",64, (char*)"obible2p64t4.txt");
-    does(8,(char*)"bible2.txt",64, (char*)"obible2p64t8.txt");
-    does(16,(char*)"bible2.txt",64, (char*)"obible2p64t16.txt");
-    does(32,(char*)"bible2.txt",64, (char*)"obible2p64t32.txt");
-
-    does(2,(char*)"bible4.txt",2, (char*)"obible4p2t2.txt");
-    does(4,(char*)"bible4.txt",2, (char*)"obible4p2t4.txt");
-    does(8,(char*)"bible4.txt",2, (char*)"obible4p2t8.txt");
-    does(16,(char*)"bible4.txt",2, (char*)"obible4p2t16.txt");
-    does(32,(char*)"bible4.txt",2, (char*)"obible4p2t32.txt");
-    does(2,(char*)"bible4.txt",4, (char*)"obible4p4t2.txt");
-    does(4,(char*)"bible4.txt",4, (char*)"obible4p4t4.txt");
-    does(8,(char*)"bible4.txt",4, (char*)"obible4p4t8.txt");
-    does(16,(char*)"bible4.txt",4, (char*)"obible4p4t16.txt");
-    does(32,(char*)"bible4.txt",4, (char*)"obible4p4t32.txt");
-    does(2,(char*)"bible4.txt",8, (char*)"obible4p8t2.txt");
-    does(4,(char*)"bible4.txt",8, (char*)"obible4p8t4.txt");
-    does(8,(char*)"bible4.txt",8, (char*)"obible4p8t8.txt");
-    does(16,(char*)"bible4.txt",8, (char*)"obible4p8t16.txt");
-    does(32,(char*)"bible4.txt",8, (char*)"obible4p8t32.txt");
-    does(2,(char*)"bible4.txt",16, (char*)"obible4p16t2.txt");
-    does(4,(char*)"bible4.txt",16, (char*)"obible4p16t4.txt");
-    does(8,(char*)"bible4.txt",16, (char*)"obible4p16t8.txt");
-    does(16,(char*)"bible4.txt",16, (char*)"obible4p16t16.txt");
-    does(32,(char*)"bible4.txt",16, (char*)"obible4p16t32.txt");
-    does(2,(char*)"bible4.txt",32, (char*)"obible4p32t2.txt");
-    does(4,(char*)"bible4.txt",32, (char*)"obible4p32t4.txt");
-    does(8,(char*)"bible4.txt",32, (char*)"obible4p32t8.txt");
-    does(16,(char*)"bible4.txt",32, (char*)"obible4p32t16.txt");
-    does(32,(char*)"bible4.txt",32, (char*)"obible4p32t32.txt");
-    does(2,(char*)"bible4.txt",64, (char*)"obible4p64t2.txt");
-    does(4,(char*)"bible4.txt",64, (char*)"obible4p64t4.txt");
-    does(8,(char*)"bible4.txt",64, (char*)"obible4p64t8.txt");
-    does(16,(char*)"bible4.txt",64, (char*)"obible4p64t16.txt");
-    does(32,(char*)"bible4.txt",64, (char*)"obible4p64t32.txt");
-
-        
-    does(2,(char*)"bible10.txt",2, (char*)"obible10p2t2.txt");
-    does(4,(char*)"bible10.txt",2, (char*)"obible10p2t4.txt");
-    does(8,(char*)"bible10.txt",2, (char*)"obible10p2t8.txt");
-    does(16,(char*)"bible10.txt",2, (char*)"obible10p2t16.txt");
-    does(32,(char*)"bible10.txt",2, (char*)"obible10p2t32.txt");
-    does(2,(char*)"bible10.txt",4, (char*)"obible10p4t2.txt");
-    does(4,(char*)"bible10.txt",4, (char*)"obible10p4t4.txt");
-    does(8,(char*)"bible10.txt",4, (char*)"obible10p4t8.txt");
-    does(16,(char*)"bible10.txt",4, (char*)"obible10p4t16.txt");
-    does(32,(char*)"bible10.txt",4, (char*)"obible10p4t32.txt");
-    does(2,(char*)"bible10.txt",8, (char*)"obible10p8t2.txt");
-    does(4,(char*)"bible10.txt",8, (char*)"obible10p8t4.txt");
-    does(8,(char*)"bible10.txt",8, (char*)"obible10p8t8.txt");
-    does(16,(char*)"bible10.txt",8, (char*)"obible10p8t16.txt");
-    does(32,(char*)"bible10.txt",8, (char*)"obible10p8t32.txt");
-    does(2,(char*)"bible10.txt",16, (char*)"obible10p16t2.txt");
-    does(4,(char*)"bible10.txt",16, (char*)"obible10p16t4.txt");
-    does(8,(char*)"bible10.txt",16, (char*)"obible10p16t8.txt");
-    does(16,(char*)"bible10.txt",16, (char*)"obible10p16t16.txt");
-    does(32,(char*)"bible10.txt",16, (char*)"obible10p16t32.txt");
-    does(2,(char*)"bible10.txt",32, (char*)"obible10p32t2.txt");
-    does(4,(char*)"bible10.txt",32, (char*)"obible10p32t4.txt");
-    does(8,(char*)"bible10.txt",32, (char*)"obible10p32t8.txt");
-    does(16,(char*)"bible10.txt",32, (char*)"obible10p32t16.txt");
-    does(32,(char*)"bible10.txt",32, (char*)"obible10p32t32.txt");
-    does(2,(char*)"bible10.txt",64, (char*)"obible10p64t2.txt");
-    does(4,(char*)"bible10.txt",64, (char*)"obible10p64t4.txt");
-    does(8,(char*)"bible10.txt",64, (char*)"obible10p64t8.txt");
-    does(16,(char*)"bible10.txt",64, (char*)"obible10p64t16.txt");
-    does(32,(char*)"bible10.txt",64, (char*)"obible10p64t32.txt");
-
-
-
-    does(2,(char*)"gen.txt",2, (char*)"ogenp2t2.txt");
-    does(4,(char*)"gen.txt",2, (char*)"ogenp2t4.txt");
-    does(8,(char*)"gen.txt",2, (char*)"ogenp2t8.txt");
-    does(16,(char*)"gen.txt",2, (char*)"ogenp2t16.txt");
-    does(32,(char*)"gen.txt",2, (char*)"ogenp2t32.txt");
-    does(2,(char*)"gen.txt",4, (char*)"ogenp4t2.txt");
-    does(4,(char*)"gen.txt",4, (char*)"ogenp4t4.txt");
-    does(8,(char*)"gen.txt",4, (char*)"ogenp4t8.txt");
-    does(16,(char*)"gen.txt",4, (char*)"ogenp4t16.txt");
-    does(32,(char*)"gen.txt",4, (char*)"ogenp4t32.txt");
-    does(2,(char*)"gen.txt",8, (char*)"ogenp8t2.txt");
-    does(4,(char*)"gen.txt",8, (char*)"ogenp8t4.txt");
-    does(8,(char*)"gen.txt",8, (char*)"ogenp8t8.txt");
-    does(16,(char*)"gen.txt",8, (char*)"ogenp8t16.txt");
-    does(32,(char*)"gen.txt",8, (char*)"ogenp8t32.txt");
-    does(2,(char*)"gen.txt",16, (char*)"ogenp16t2.txt");
-    does(4,(char*)"gen.txt",16, (char*)"ogenp16t4.txt");
-    does(8,(char*)"gen.txt",16, (char*)"ogenp16t8.txt");
-    does(16,(char*)"gen.txt",16, (char*)"ogenp16t16.txt");
-    does(32,(char*)"gen.txt",16, (char*)"ogenp16t32.txt");
-    does(2,(char*)"gen.txt",32, (char*)"ogenp32t2.txt");
-    does(4,(char*)"gen.txt",32, (char*)"ogenp32t4.txt");
-    does(8,(char*)"gen.txt",32, (char*)"ogenp32t8.txt");
-    does(16,(char*)"gen.txt",32, (char*)"ogenp32t16.txt");
-    does(32,(char*)"gen.txt",32, (char*)"ogenp32t32.txt");
-    does(2,(char*)"gen.txt",64, (char*)"ogenp64t2.txt");
-    does(4,(char*)"gen.txt",64, (char*)"ogenp64t4.txt");
-    does(8,(char*)"gen.txt",64, (char*)"ogenp64t8.txt");
-    does(16,(char*)"gen.txt",64, (char*)"ogenp64t16.txt");
-    does(32,(char*)"gen.txt",64, (char*)"ogenp64t32.txt");
-
-
+    
+    
     does(2,(char*)"gen1.txt",2, (char*)"ogen1p2t2.txt");
     does(4,(char*)"gen1.txt",2, (char*)"ogen1p2t4.txt");
     does(8,(char*)"gen1.txt",2, (char*)"ogen1p2t8.txt");
@@ -1299,43 +1140,8 @@ int main(){
     does(8,(char*)"gen1.txt",64, (char*)"ogen1p64t8.txt");
     does(16,(char*)"gen1.txt",64, (char*)"ogen1p64t16.txt");
     does(32,(char*)"gen1.txt",64, (char*)"ogen1p64t32.txt");
-
-
-    does(2,(char*)"gen5.txt",2, (char*)"ogen5p2t2.txt");
-    does(4,(char*)"gen5.txt",2, (char*)"ogen5p2t4.txt");
-    does(8,(char*)"gen5.txt",2, (char*)"ogen5p2t8.txt");
-    does(16,(char*)"gen5.txt",2, (char*)"ogen5p2t16.txt");
-    does(32,(char*)"gen5.txt",2, (char*)"ogen5p2t32.txt");
-    does(2,(char*)"gen5.txt",4, (char*)"ogen5p4t2.txt");
-    does(4,(char*)"gen5.txt",4, (char*)"ogen5p4t4.txt");
-    does(8,(char*)"gen5.txt",4, (char*)"ogen5p4t8.txt");
-    does(16,(char*)"gen5.txt",4, (char*)"ogen5p4t16.txt");
-    does(32,(char*)"gen5.txt",4, (char*)"ogen5p4t32.txt");
-    does(2,(char*)"gen5.txt",8, (char*)"ogen5p8t2.txt");
-    does(4,(char*)"gen5.txt",8, (char*)"ogen5p8t4.txt");
-    does(8,(char*)"gen5.txt",8, (char*)"ogen5p8t8.txt");
-    does(16,(char*)"gen5.txt",8, (char*)"ogen5p8t16.txt");
-    does(32,(char*)"gen5.txt",8, (char*)"ogen5p8t32.txt");
-    does(2,(char*)"gen5.txt",16, (char*)"ogen5p16t2.txt");
-    does(4,(char*)"gen5.txt",16, (char*)"ogen5p16t4.txt");
-    does(8,(char*)"gen5.txt",16, (char*)"ogen5p16t8.txt");
-    does(16,(char*)"gen5.txt",16, (char*)"ogen5p16t16.txt");
-    does(32,(char*)"gen5.txt",16, (char*)"ogen5p16t32.txt");
-    does(2,(char*)"gen5.txt",32, (char*)"ogen5p32t2.txt");
-    does(4,(char*)"gen5.txt",32, (char*)"ogen5p32t4.txt");
-    does(8,(char*)"gen5.txt",32, (char*)"ogen5p32t8.txt");
-    does(16,(char*)"gen5.txt",32, (char*)"ogen5p32t16.txt");
-    does(32,(char*)"gen5.txt",32, (char*)"ogen5p32t32.txt");
-    does(2,(char*)"gen5.txt",64, (char*)"ogen5p64t2.txt");
-    does(4,(char*)"gen5.txt",64, (char*)"ogen5p64t4.txt");
-    does(8,(char*)"gen5.txt",64, (char*)"ogen5p64t8.txt");
-    does(16,(char*)"gen5.txt",64, (char*)"ogen5p64t16.txt");
-    does(32,(char*)"gen5.txt",64, (char*)"ogen5p64t32.txt");
-
-
-
-
-        
+    
+    
     does(2,(char*)"gen10.txt",2, (char*)"ogen10p2t2.txt");
     does(4,(char*)"gen10.txt",2, (char*)"ogen10p2t4.txt");
     does(8,(char*)"gen10.txt",2, (char*)"ogen10p2t8.txt");
@@ -1366,8 +1172,7 @@ int main(){
     does(8,(char*)"gen10.txt",64, (char*)"ogen10p64t8.txt");
     does(16,(char*)"gen10.txt",64, (char*)"ogen10p64t16.txt");
     does(32,(char*)"gen10.txt",64, (char*)"ogen10p64t32.txt");
-
-        
+    
     does(2,(char*)"gen50.txt",2, (char*)"ogen50p2t2.txt");
     does(4,(char*)"gen50.txt",2, (char*)"ogen50p2t4.txt");
     does(8,(char*)"gen50.txt",2, (char*)"ogen50p2t8.txt");
@@ -1398,6 +1203,12 @@ int main(){
     does(8,(char*)"gen50.txt",64, (char*)"ogen50p64t8.txt");
     does(16,(char*)"gen50.txt",64, (char*)"ogen50p64t16.txt");
     does(32,(char*)"gen50.txt",64, (char*)"ogen50p64t32.txt");
+        
+    //does(2,(char*)"text2.txt",64, (char*)"otext2p1000t2.txt");
+    //does(4,(char*)"text2.txt",64, (char*)"otext2p1000t4.txt");
+    //does(8,(char*)"text2.txt",64, (char*)"otext2p1000t8.txt");
+    //does(16,(char*)"text2.txt",64, (char*)"otext2p1000t16.txt");
+    //does(32,(char*)"text2.txt",64, (char*)"otext2p1000t32.txt");
 
 
 }
