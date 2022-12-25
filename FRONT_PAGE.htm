@@ -37,17 +37,26 @@
 
 
 <hr noshade="noshade">
-<b><font color="#005128">Project Outline:</font></b> String Matching is one of the most common problems in computer science, 
-and although Single-pattern algorithms work very well on this problem, the algorithm speed is affected by the linear increase in the size of the matching string, 
-especially when solving Bioinformatics and DNA Sequencing or Search engines or content search in large databases, 
-a large amount of data inevitably takes a lot of time. And because of the search method of String Matching, 
-it can take full advantage of Parallel Programming to solve large-scale Matching problems efficiently on large-scale systems.
-<p>Tthis project is to explore the parallel implementation of traditional string matching algorithms 
-and implement some efficient parallel string matching algorithms, as well as compare the optimization methods of string matching algorithms 
-for different parallel architectures. Through this project, I will implement one or more string matching algorithms, 
-at least one efficient version and their multiple-core and Cuda versions, and analyze the focus of parallel algorithms under different architectures.
-In the process of implementation, understand the method of implementing algorithm parallelism. 
-And understand the impact and improvement of algorithm parallelism through the analysis of experimental results.</p>
+<b><font color="#005128">Project Outline:</font></b> String matching is a fundamental problem in computer science, 
+with applications in fields such as bioinformatics, search engines, and large database searches. 
+While sequence algorithms are effective at solving this problem,
+ their performance can be limited by the linear increase in the size of the matching string, 
+ leading to long search times for large datasets. 
+ In recent years, there has been a trend toward using modern CPUs with multiple cores and GPUs for data processing, 
+ and parallelization has become an important consideration in algorithm design. Given the data structure of string matching, 
+ it can potentially be highly amenable to parallel programming, allowing for efficient solutions to large-scale matching problems on large-scale systems.
+<p>The goal of this project was to investigate the parallel implementation of traditional sequence string matching algorithms, 
+implementing their parallel versions using Cilk and Cuda, and comparing the benefits of different string matching algorithms in
+ different parallel architectures. I also examined the potential applications and limitations of these algorithms on a distributed
+ architecture. In this project, I implemented seven different string-matching algorithms in CPU parallel and five in GPU. 
+ For algorithms that are difficult to parallelize algorithmically, I partitioned the index to perform parallel operations. 
+ Some of the algorithms also used bit parallel or SSE instructions to improve performance.
+ I analyzed the speedup obtained by different algorithms and the worst case speedup obtained.</p>
+ <p>I can choose a more effective algorithm through analysis of pattern and text length, as well as preprocessing. 
+ Our experimental results also demonstrate this point. The type of data being used can also impact efficiency, 
+ as a genomic sequence with four letters may have more repetitions than natural language text, 
+ which can affect the performance of the algorithm. 
+ I will compare different datasets to explore the differences and determine the best algorithm.</p>
 <p><b><font color="#005128">Startup Paper(s):
 <a href="https://link.springer.com/chapter/10.1007/978-3-319-58943-5_15">Parallel String Matching</font></a>
 <p><b><font color="#005128">Deliverables:</font></b></p>
@@ -75,9 +84,8 @@ Paper</font></a> </div>
 
 <ul>
 
-  <li>Zvi Galil*. 1984. Optimal parallel algorithms for string matching. In Proceedings of the sixteenth annual ACM symposium on Theory of computing (STOC '84). Association for Computing Machinery, New York, NY, USA, 240-248. https://doi.org/10.1145/800057.808687</li>
-  <li>Pfaffe, Philip & Tillmann, Martin & Lutteropp, Sarah & Scheirle, Bernhard & Zerr, Kevin. (2016). Parallel String Matching. 10.1007/978-3-319-58943-5_15. https://rdcu.be/cWcwf</li>
-  <li>C. -L. Hung, T. -H. Hsu, H. -H. Wang and C. -Y. Lin, "A GPU-based Bit-Parallel Multiple Pattern Matching Algorithm," 2018 IEEE 20th International Conference on High Performance Computing and Communications; IEEE 16th International Conference on Smart City; IEEE 4th International Conference on Data Science and Systems (HPCC/SmartCity/DSS), 2018, pp. 1219-1222, doi: 10.1109/HPCC/SmartCity/DSS.2018.00205.</li>
+  <li><a href="https://dl.acm.org/doi/proceedings/10.1145/800057">Zvi Galil*. 1984. Optimal parallel algorithms for string matching. In Proceedings of the sixteenth annual ACM symposium on Theory of computing (STOC '84). Association for Computing Machinery, New York, NY, USA, 240-248. https://doi.org/10.1145/800057.808687</font></a></li>
+  <li><a href="https://ieeexplore.ieee.org/document/8622943">C. -L. Hung, T. -H. Hsu, H. -H. Wang and C. -Y. Lin, "A GPU-based Bit-Parallel Multiple Pattern Matching Algorithm," 2018 IEEE 20th International Conference on High Performance Computing and Communications; IEEE 16th International Conference on Smart City; IEEE 4th International Conference on Data Science and Systems (HPCC/SmartCity/DSS), 2018, pp. 1219-1222, doi: 10.1109/HPCC/SmartCity/DSS.2018.00205.</font></a></li>
 </ul>
 
 </body></html>
