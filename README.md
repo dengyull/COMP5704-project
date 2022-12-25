@@ -27,7 +27,7 @@ nvcc ParallelStringMatch.cu
 ## Related
 
 - [SMART](https://github.com/smart-tool/smart) - String Matching Algorithm Research Tool
-- [opencilk](https://www.opencilk.org/) - opencilk
+- [Opencilk](https://www.opencilk.org/) - Opencilk
 
 ## License
 
