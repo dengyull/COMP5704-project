@@ -1109,7 +1109,7 @@ int main(){
 	
     
     
-    
+    /* test case
     does(2,(char*)"gen1.txt",2, (char*)"ogen1p2t2.txt");
     does(4,(char*)"gen1.txt",2, (char*)"ogen1p2t4.txt");
     does(8,(char*)"gen1.txt",2, (char*)"ogen1p2t8.txt");
@@ -1204,11 +1204,19 @@ int main(){
     does(16,(char*)"gen50.txt",64, (char*)"ogen50p64t16.txt");
     does(32,(char*)"gen50.txt",64, (char*)"ogen50p64t32.txt");
         
-    //does(2,(char*)"text2.txt",64, (char*)"otext2p1000t2.txt");
-    //does(4,(char*)"text2.txt",64, (char*)"otext2p1000t4.txt");
-    //does(8,(char*)"text2.txt",64, (char*)"otext2p1000t8.txt");
-    //does(16,(char*)"text2.txt",64, (char*)"otext2p1000t16.txt");
-    //does(32,(char*)"text2.txt",64, (char*)"otext2p1000t32.txt");
+    does(2,(char*)"text2.txt",64, (char*)"otext2p1000t2.txt");
+    does(4,(char*)"text2.txt",64, (char*)"otext2p1000t4.txt");
+    does(8,(char*)"text2.txt",64, (char*)"otext2p1000t8.txt");
+    does(16,(char*)"text2.txt",64, (char*)"otext2p1000t16.txt");
+    does(32,(char*)"text2.txt",64, (char*)"otext2p1000t32.txt");*/
+    int t = 1;
+    if (argc > 1)
+        t = atol(argv[1]);
+    int p = 1;
+    if (argc > 2)
+        p = atol(argv[2]);
 
+
+    does(t,(char*)argv[3],p, (char*)argv[4]);
 
 }
