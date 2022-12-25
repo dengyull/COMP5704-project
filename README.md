@@ -22,3 +22,9 @@ Compile with nvcc:
 ```sh
 nvcc ParallelStringMatch.cu
 ```
+
+
+## License
+
+[MIT](LICENSE) ©
+
