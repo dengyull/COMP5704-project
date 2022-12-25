@@ -6,17 +6,15 @@ String matching is a fundamental problem in computer science, with applications 
 
 The goal of this project was to investigate the parallel implementation of traditional sequence string matching algorithms, implementing their parallel versions using Cilk and Cuda, and comparing the benefits of different string matching algorithms in different parallel architectures. I also examined the potential applications and limitations of these algorithms on a distributed architecture. In this project, I implemented seven different string-matching algorithms in CPU parallel and five in GPU. For algorithms that are difficult to parallelize algorithmically, I partitioned the index to perform parallel operations. Some of the algorithms also used bit parallel or SSE instructions to improve performance. I analyzed the speedup obtained by different algorithms and the worst case speedup obtained.
 
-It can choose a more effective algorithm through analysis of pattern and text length, as well as preprocessing. Our experimental results also demonstrate this point. The type of data being used can also impact efficiency, as a genomic sequence with four letters may have more repetitions than natural language text, which can affect the performance of the algorithm. I will compare different datasets to explore the differences and determine the best algorithm.
-
 ## Usage
-###CPU Version:
+### CPU Version:
 Install Cilk, follow instruction from<a href="https://www.opencilk.org/doc/users-guide/install/">opencilk.org.</a>
 Compile with SSE 4.2. for example:
 
 ```sh
 /opt/opencilk/bin/clang++ -fopencilk -O3 StringMatch.cpp -o StringMatch -msse4.2
 ```
-###GPU Version:
+### GPU Version:
 Install Cuda
 
 Compile with nvcc:
